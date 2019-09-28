@@ -1,0 +1,83 @@
+<nav class="navbar fixed-top navbar-expand-lg navbar-light white scrolling-navbar">
+        <div class="container-fluid">
+  
+          <!-- Collapse -->
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+  
+          <!-- Links -->
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+  
+            <!-- Left -->
+            <ul class="navbar-nav" style="width: 192px!important;">
+              <li class="nav-item">
+                <a class="nav-link waves-effect" onclick="no();"><i class="fas fa-plus-square" aria-hidden="true"></i> Nueva Orden</a>
+              </li>
+            </ul>
+  
+
+            <!-- Right -->
+            <ul class="navbar-nav nav-flex-icons ml-auto">
+                <li class="nav-item">
+                <a class="nav-link waves-effect" href="/" style="display: none!important;"><i class="fas fa-info-circle" aria-hidden="true"></i></a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link waves-effect" href="javascript:destroy_session();"><i class="fas fa-user" aria-hidden="true"></i> Salir</a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link waves-effect" href="/" style="display: none!important;"><i class="fas fa-cogs" aria-hidden="true"></i></a>
+                </li>
+                
+                </ul>
+  
+          </div>
+  
+        </div>
+</nav>
+<div class="container-fluid pt-5">
+<div class="row">
+  <div class="col-md-3 px-1">
+      <div class="card text-center">
+          <div class="card-body px-2">
+            <h5 class="card-title">Agregado</h5>
+            <div id="added-content" class="fichaje">
+
+              </div>
+          </div>
+        </div>
+  </div>
+  <div class="col-md-3 px-1">
+      <div class="card text-center">
+          <div class="card-body px-2">
+            <h5 class="card-title">Verificando</h5>
+            <div id="verify-content" class="fichaje">
+
+              </div>
+          </div>
+        </div>
+  </div>
+  <div class="col-md-3 px-1">
+      <div class="card text-center">
+          <div class="card-body px-2">
+            <h5 class="card-title">En Camino</h5>
+            <div id="walking-content" class="fichaje">
+
+              </div>
+          </div>
+        </div>
+  </div>
+  <div class="col-md-3 px-1">
+      <div class="card text-center">
+          <div class="card-body px-2">
+            <h5 class="card-title">Completado</h5>
+            <div id="complete-content" class="fichaje">
+
+            </div>
+          </div>
+        </div>
+  </div>
+</div>
+</div>
+    </div>

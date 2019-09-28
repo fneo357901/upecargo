@@ -1,0 +1,56 @@
+<nav class="navbar fixed-top navbar-expand-lg navbar-light white scrolling-navbar">
+        <div class="container-fluid">
+  
+          <!-- Collapse -->
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+  
+          <!-- Links -->
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+  
+            <!-- Left -->
+            <ul class="navbar-nav" style="width: 192px!important;">
+              <li class="nav-item">
+                <a class="nav-link waves-effect" href="javascript:NuevoConductor();"><i class="fas fa-plus-square" aria-hidden="true"></i> Nuevo Conductor</a>
+              </li>
+            </ul>
+
+            <!-- Right -->
+            <ul class="navbar-nav nav-flex-icons ml-auto">
+            <li class="nav-item pr-2">
+            <div class="form-group" style="margin-bottom: 0!important;">
+                Filtrar: <select class="form-control" id="ConductorFiltro" style="display: inline!important;width: auto!important;margin-bottom: 0!important;" onchange="filtroConductor($(this).val());">
+                <option value="all">Mostrar Todos</option>
+                <option value="disponible">Disponible</option>
+                <option value="en_camino">En Camino</option>
+                <option value="suspendido">Suspendido</option>
+              </select>
+            </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link waves-effect" href="/" style="display: none!important;"><i class="fas fa-info-circle" aria-hidden="true"></i></a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link waves-effect" href="javascript:destroy_session();"><i class="fas fa-user" aria-hidden="true"></i> Salir</a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link waves-effect" href="/" style="display: none!important;"><i class="fas fa-cogs" aria-hidden="true"></i></a>
+                </li>
+            </ul>
+  
+          </div>
+  
+        </div>
+</nav>
+
+    <div class="container-fluid px-0 mt-5">
+      <div class="col-md-12">
+      <div class="row wow fadeIn" id="Conductors">
+    
+          </div>
+      </div>
+    </div>
+    </div>
+    <!-- Modal -->

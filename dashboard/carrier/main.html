@@ -1,0 +1,65 @@
+<nav class="navbar fixed-top navbar-expand-lg navbar-light white scrolling-navbar">
+        <div class="container-fluid">
+  
+            <!-- Left -->
+            <ul class="navbar-nav" style="width: 192px!important;">
+              <li class="nav-item">
+                <a class="nav-link waves-effect" onclick="no();"><i class="fas fa-plus-square" aria-hidden="true"></i> Nueva Orden</a>
+              </li>
+            </ul>
+
+            <!-- Right -->
+            <ul class="navbar-nav nav-flex-icons ml-auto">
+                <li class="nav-item">
+                <a class="nav-link waves-effect" href="/" style="display: none!important;"><i class="fas fa-info-circle" aria-hidden="true"></i></a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link waves-effect" href="javascript:destroy_session();"><i class="fas fa-user" aria-hidden="true"></i> Salir</a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link waves-effect" href="/" style="display: none!important;"><i class="fas fa-cogs" aria-hidden="true"></i></a>
+                </li>
+                
+                </ul>
+  
+          </div>
+</nav>
+      <!-- Navbar -->  
+    <div class="col-md-12 px-0 pt-3" style="height: 300px">
+    <div id="map-container-google-2" class="z-depth-1-half map-container">
+    <iframe src="https://maps.google.com/maps?q=chicago&t=&z=13&ie=UTF8&output=embed" frameborder="0"
+    style="border:0" allowfullscreen></iframe>
+    </div>        
+    </div>
+
+    <div class="container-fluid px-0 mt-5">
+
+            <div class="col-md-12 px-0">
+
+                    <!--Card-->
+                    <div class="card">
+                    <!--Card content-->
+                    <h3 class="pt-4 mx-auto">Operaciones Completadas</h3>
+
+                    <div class="card-body text-center">
+                        <!-- Table  -->
+                        <table class="table table-hover text-left">                
+                        <!-- Table body -->
+                        <tbody id="CompletedTable">           
+                        </tbody>
+                        <!-- Table body -->
+                        </table>
+                        <!-- Table  -->
+                
+                    </div>
+                
+                    </div>
+                    <!--/.Card-->
+                
+                    </div>
+
+    </div>
+    <!-- Heading -->
+
+
+    </div>
