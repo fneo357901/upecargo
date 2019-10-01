@@ -1,8 +1,8 @@
 <?php
 require('db.php');
 
-$id_user = $_GET['id'];
-$sql = sprintf("SELECT * from unidades_carrier WHERE id_user='%s'",$id_user);
+$stats = $_GET['stats'];
+$sql = sprintf("SELECT * from ordenes WHERE stats='%s'",$stats);
 $sql = urldecode($sql);
 
 $result = $conn->query($sql);
@@ -17,7 +17,6 @@ if ($result->num_rows > 0) {
 } else {
     echo '[{ data: "Registro Vacio" }]';
 }
-
 
 
 $conn->close();

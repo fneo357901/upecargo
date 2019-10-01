@@ -29,8 +29,7 @@ $sql = urldecode($sql);
 if($conn->query($sql)){
     echo "success";
 } else {
-    echo "error";
-    //printf("Errormessage: %s\n", $conn->error);
+    printf("Errormessage: %s\n", $conn->error);
 }
 
 

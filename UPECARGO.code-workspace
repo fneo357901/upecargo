@@ -1,0 +1,22 @@
+{
+	"folders": [
+		{
+			"path": "backend"
+		},
+		{
+			"path": "css"
+		},
+		{
+			"path": "dashboard"
+		},
+		{
+			"path": "js"
+		},
+		{
+			"path": "img"
+		},
+		{
+			"path": "."
+		}
+	]
+}

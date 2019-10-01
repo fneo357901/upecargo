@@ -10,7 +10,7 @@ if ($result->num_rows > 0) {
     echo "success";
 //    sendmail_recover($usr);
 } else {
-    echo "error";
+    printf("Errormessage: %s\n", $conn->error);
 }
 $conn->close();
 ?>

@@ -47,31 +47,15 @@ cache: false,
   dataStructure['Op'] = nombre;
   dataStructure['status'] = status;
   
-  
-  var structure_completed = '<div id="task_'+dataStructure.id+'" class="card text-white bg-primary mb-2" style="max-width: 20rem;"><button onclick="boardDettach('+dataStructure.id+')" type="button" class="close" style="width:100%!important;padding-right:10px!important;padding-top:5px!important;position: absolute!important;"><span aria-hidden="true" class="float-right">×</span></button><a onclick="encargo_detalle('+dataStructure.id+')"><div class="card-header">'+dataStructure.Op+'</div></a></div>';
-  if(dataStructure.status=='completed') {
-    $('#complete-content').append(structure_completed);
-  }
-  
-  var structure_walking = '<div id="task_'+dataStructure.id+'" class="card text-white bg-success mb-2" style="max-width: 20rem;"><button onclick="boardDettach('+dataStructure.id+')" type="button" class="close" style="width:100%!important;padding-right:10px!important;padding-top:5px!important;position: absolute!important;"><span aria-hidden="true" class="float-right">×</span></button><a onclick="encargo_detalle('+dataStructure.id+')"><div class="card-header">'+dataStructure.Op+'</div></a></div>';
-  if(dataStructure.status=='walking') {
-    $('#walking-content').append(structure_walking);
-  }
-  
-  var structure_warning = '<div id="task_'+dataStructure.id+'" class="card text-white bg-warning mb-2" style="max-width: 20rem;"><button onclick="boardDettach('+dataStructure.id+')" type="button" class="close" style="width:100%!important;padding-right:10px!important;padding-top:5px!important;position: absolute!important;"><span aria-hidden="true" class="float-right">×</span></button><a onclick="encargo_detalle('+dataStructure.id+')"><div class="card-header">'+dataStructure.Op+'</div></a></div>';
+  var structure_warning = '<div id="task_'+dataStructure.id+'" class="col-md-4 px-1 py-1 text-center"><div class="card-header" style="background-color:#FFF!important">'+dataStructure.Op+'</br><a onclick="encargo_detalle('+dataStructure.id+')" class="btn btn-blue btn-sm">Ver Detalles</a><a onclick="tomar_envio('+dataStructure.id+')" class="btn btn-blue btn-sm">Tomar Envio</a></div></div>';
   if(dataStructure.status=='warning') {
     $('#verify-content').append(structure_warning);
-  }
-  
-  var structure_danger = '<div id="task_'+dataStructure.id+'" class="card text-white bg-danger mb-2" style="max-width: 20rem;"><button onclick="boardDettach('+dataStructure.id+')" type="button" class="close" style="width:100%!important;padding-right:10px!important;padding-top:5px!important;position: absolute!important;"><span aria-hidden="true" class="float-right">×</span></button><a onclick="encargo_detalle('+dataStructure.id+')"><div class="card-header">'+dataStructure.Op+'</div></a></div>';
-  if(dataStructure.status=='danger') {
-    $('#added-content').append(structure_danger);
   }
   
   }
 
   function board(){
-    $.getJSON('/backend/board.php', {id: usuario.id_user.valueOf(), _: new Date().getTime()}, function(data) {
+    $.getJSON('/backend/carrier-board.php', {stats: 'warning', _: new Date().getTime()}, function(data) {
     var json = data;
     if(old_json!==json) {
     $(".fichaje").empty();
@@ -108,13 +92,13 @@ function CompletedTable(id,carga,entrega,fecha_entrega){
   dataCompleted['id'] = id;
   dataCompleted['carga'] = carga;
   dataCompleted['entrega'] = entrega;
-  dataCompleted['stats'] = ' Completado';
+  dataCompleted['stats'] = ' En Curso';
   dataCompleted['fecha_entrega'] = fecha_entrega;
   var public_complete = '<tr onclick="encargo_detalle('+dataCompleted.id+')"><td><i class="fas fa-user    "></i> '+dataCompleted.carga+'</td><td><i class="fas fa-map-marked-alt    "></i>'+dataCompleted.entrega+'</td><td><i class="fas fa-check-circle    "></i>'+dataCompleted.stats+'</td><td><i class="fas fa-calendar-alt    "></i>'+dataCompleted.fecha_entrega+'</td></tr>';
   $('#CompletedTable').append(public_complete);
 }
 function runTable(){
-$.getJSON('/backend/ordenes_completadas.php', {id: usuario.id_user.valueOf(), _: new Date().getTime()}, function(data) {
+$.getJSON('/backend/ordenes_en_curso.php', {id: usuario.id_user.valueOf(), _: new Date().getTime()}, function(data) {
     var json = data;
     if(old_json!==json) {
     $("#CompletedTable").empty();
@@ -151,7 +135,7 @@ function HistoryTable(id,carga,entrega,fecha_entrega,stats){
   $('#HistoryTable').append(public_complete);
 }
 function runHistoryTable(){
-$.getJSON('/backend/board.php', {id: usuario.id_user.valueOf(), _: new Date().getTime()}, function(data) {
+$.getJSON('/backend/carrier-history-board.php', {id: usuario.id_user.valueOf(), _: new Date().getTime()}, function(data) {
     var json = data;
     if(old_json!==json) {
     $("#HistoryTable").empty();
@@ -279,8 +263,8 @@ $.ajax({
           }
           runConductors();
         }
-        if(sucessed == "error") {
-            alert("Ocurrio al actualizar el estado del Conductor. Intente de Nuevo.");
+        if(sucessed !== "success") {
+            alert(sucessed);
         }
     }
 });  
@@ -330,8 +314,8 @@ $.ajax({
           $('#task_'+id).remove();
           board();
         }
-        if(sucessed == "error") {
-            alert("Ocurrio al remover al Conductor. Intente de Nuevo.");
+        if(sucessed !== "success") {
+            alert(sucessed);
         }
     }
 });  
@@ -340,11 +324,59 @@ $.ajax({
 
 //setInterval(runConductors, 1000);
 
+function getUnidades() {
+  $.getJSON('/backend/get_unidades.php', {id: usuario.id_user.valueOf(), _: new Date().getTime()}, function(data) {
+    var json = data;
+    $('#unidades-transporte').empty();
+      for(var i = 0; i < json.length; i++) {
+      var obj = json[i];
+      var Options = "<option value='"+obj.id+"'>"+obj.nombre+"</option>";  
+      $('#unidades-transporte').append(Options);
+    }
+  });
+}
+
+function tomando_envio(id){
+  var GenerandoEnvio = new Array();
+  GenerandoEnvio["id"] = id;
+  GenerandoEnvio["id_empresa_transporte"] = usuario['id_user'];
+  GenerandoEnvio["stats"] = 'walking';
+  GenerandoEnvio["id_unidad"] = $('#unidades-transporte').val();
+  
+  $.ajax({
+      type: "POST",
+      url: "/backend/tomar_envio.php",
+      data: {
+      id: GenerandoEnvio.id.valueOf(),
+      id_empresa_transporte: GenerandoEnvio.id_empresa_transporte.valueOf(),
+      stats: GenerandoEnvio.stats.valueOf(),
+      id_unidad: GenerandoEnvio.id_unidad.valueOf(),
+     }, 
+      cache: false,
+  
+      success: function(sucessed){
+          if(sucessed == "success") {
+              alert("La orden a sido tomada y enviada a la unidad correspondiente");
+              $('#tomar_envio').modal('hide');
+          }
+          if(sucessed !== "success") {
+              alert(sucessed);
+          }
+      }
+  });  
+}
+
+function tomar_envio(id){
+  $("#button_assign").empty();
+  getUnidades();
+  var button_assign = '<a class="btn btn-primary mx-0 w-100" href="javascript:tomando_envio('+id+')" role="button">Asignar</a>';
+  $("#button_assign").append(button_assign);
+  $('#tomar_envio').modal('show');
+}
+
 
 function encargo_detalle(id){
-  var edit_button = '<a href="javascript:encargo_edit_detalle('+id+')" class="btn btn-primary">Editar Orden</a>';
-  var close_button = '<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>';
-  $('#DisplayDetails > div > div > div.modal-footer').append(edit_button);
+  var close_button = '<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>';
   $('#DisplayDetails > div > div > div.modal-footer').append(close_button);
     $.getJSON('/backend/detail.php', {id: id, _: new Date().getTime()}, function(data) {
       var jdata = data; 

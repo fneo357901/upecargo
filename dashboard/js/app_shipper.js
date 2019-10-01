@@ -474,8 +474,9 @@ $.ajax({
             alert("Se a registrado la Orden Satisfactoriamente");
             $('#NewOrder').modal('hide');
         }
-        if(sucessed == "error") {
-            alert("Ocurrio al registrar la orden. Intente de Nuevo.");
+        if(sucessed !== "success") {
+          alert(sucessed);
+            //alert("Ocurrio al registrar la orden. Intente de Nuevo.");
         }
     }
 });  

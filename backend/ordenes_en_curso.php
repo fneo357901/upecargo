@@ -1,8 +1,8 @@
 <?php
 require('db.php');
 
-$id_user = $_GET['id'];
-$sql = sprintf("SELECT * from unidades_carrier WHERE id_user='%s'",$id_user);
+$id_empresa_transporte = $_GET['id'];
+$sql = sprintf("SELECT * from ordenes WHERE id_empresa_transporte='%s' AND stats='%s'",$id_empresa_transporte,'walking');
 $sql = urldecode($sql);
 
 $result = $conn->query($sql);
@@ -14,10 +14,7 @@ if ($result->num_rows > 0) {
     }
     $view = json_encode($consulta);
     echo $view;
-} else {
-    echo '[{ data: "Registro Vacio" }]';
 }
-
 
 
 $conn->close();

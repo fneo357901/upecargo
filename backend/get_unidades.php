@@ -2,7 +2,7 @@
 require('db.php');
 
 $id_user = $_GET['id'];
-$sql = sprintf("SELECT * from unidades_carrier WHERE id_user='%s'",$id_user);
+$sql = sprintf("SELECT * from unidades_carrier WHERE id_user='%s' AND estado='%s'",$id_user,"disponible");
 $sql = urldecode($sql);
 
 $result = $conn->query($sql);
@@ -15,7 +15,7 @@ if ($result->num_rows > 0) {
     $view = json_encode($consulta);
     echo $view;
 } else {
-    echo '[{ data: "Registro Vacio" }]';
+    echo '';
 }
 
 
