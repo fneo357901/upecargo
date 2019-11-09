@@ -12,7 +12,7 @@ $transport_type = $_POST['transport_type'];
 $carga = $_POST['carga'];
 $requisitos = $_POST['requisitos'];
 $advertencias = $_POST['advertencias'];
-$sql = sprintf("INSERT INTO ordenes (id_user, stats, presupuesto, busqueda, entrega, fecha_recogida, fecha_entrega, transport_type, carga, requisitos, advertencias) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s');", $id_user, $status, $presupuesto, $busqueda, $entrega, $fecha_recogida, $fecha_entrega, $transport_type, $carga, $requisitos, $advertencias);
+$sql = sprintf("INSERT INTO ordenes (id_user, id_unidad, id_empleado, id_empresa_transporte, stats, presupuesto, busqueda, entrega, fecha_recogida, fecha_entrega, transport_type, carga, requisitos, advertencias) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s');", $id_user, '0','0','0', $status, $presupuesto, $busqueda, $entrega, $fecha_recogida, $fecha_entrega, $transport_type, $carga, $requisitos, $advertencias);
 $sql = urldecode($sql);
 //echo $sql;
 

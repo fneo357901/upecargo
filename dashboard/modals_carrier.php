@@ -1,8 +1,63 @@
-<div class="modal fade" id="DisplayDetails" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+<div class="modal fade" id="InfoEmpresa" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
   aria-hidden="true" style="z-index: 999999999999999999999!important">
 
   <!-- Add .modal-dialog-centered to .modal-dialog to vertically center the modal -->
-  <div class="modal-dialog modal-dialog-centered" role="document" style="min-width:1200px!important">
+  <div class="modal-dialog modal-dialog-centered" role="document" style="max-width:1200px!important">
+
+
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Acerca de la Empresa</h5>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-3">
+          <p>Empresa</p>
+          <p class="empresa vacio"></p>
+          <p>Telefono</p>
+          <p class="telefono vacio"></p>
+          <p>Correo</p>
+          <p class="correo vacio"></p>
+          </div>
+          <div class="col-md-3">
+          <p>Pais de Registro</p>
+          <p class="pais_registro vacio"></p>
+          <p>Codigo Transportista</p>
+          <p class="codigo_transportista vacio"></p>
+          <p>Representante Legal</p>
+          <p class="representante_legal vacio"></p>
+          </div>
+          <div class="col-md-3">
+          <p>ID Representante Legal</p>
+          <p class="id_representante_legal vacio"></p>
+          <p>ID Transportista</p>
+          <p class="id_transportista vacio"></p>
+          <p>Direccion Fiscal</p>
+          <p class="direccion_fiscal vacio"></p>
+        </div>
+        <div class="col-md-3">
+        <p>Paises de Destino</p>
+          <p class="paises_destino vacio"></p>
+          <p>Tarjeta Federacion</p>
+          <p class="tarjeta_federacion vacio"></p>
+        </div>
+        </div>            
+      </div>
+      <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<div class="modal fade" id="DisplayDetails" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true" style="z-index: 999999999999!important">
+
+  <!-- Add .modal-dialog-centered to .modal-dialog to vertically center the modal -->
+  <div class="modal-dialog modal-dialog-centered" role="document" style="max-width:1200px!important">
 
 
     <div class="modal-content">
@@ -42,6 +97,13 @@
     </div>
   </div>
 </div>
+
+
+
+
+
+
+
 
 <div class="modal fade" id="NewConductor" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
 aria-hidden="true" style="z-index: 999999999999999999999!important">
@@ -88,7 +150,7 @@ aria-hidden="true" style="z-index: 999999999999999999999!important">
 aria-hidden="true" style="z-index: 999999999999999999999!important">
 
 <!-- Add .modal-dialog-centered to .modal-dialog to vertically center the modal -->
-<div class="modal-dialog modal-dialog-centered" role="document" style="min-width:600px!important">
+<div class="modal-dialog modal-dialog-centered" role="document" style="max-width:600px!important">
 
 
   <div class="modal-content">

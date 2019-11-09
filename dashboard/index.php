@@ -19,8 +19,52 @@
   <!-- Your custom styles (optional) -->
   <link href="css/style.min.css" rel="stylesheet">
 </head>
+<style>
+body {
+  font-family: "Lato", sans-serif;
+  transition: background-color .5s;
+}
 
+.sidenav {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #111;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding:0!important;
+  margin:0!important;
+  background-color:transparent!important;
+}
+
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 10px;
+  margin-left: 50px;
+}
+
+main {
+  transition: margin-left .5s;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+html, body {
+  overflow-x: hidden;
+}
+body {
+  position: relative;
+}
+</style>
 <body class="grey lighten-3" ng-app="myApp" style="overflow-x:hidden!important;">
+<span id="menuBtn" style="font-size:30px;cursor:pointer;z-index:99999999 !important;/*! padding-top: .75rem !important; */position: absolute;/*! float: left !important; */left: 24px;display: flex !important;" class="float-left pt-2" onclick="openNav();">☰</span>
 <?php
   if($_COOKIE['account']=='shipper'){ 
     include('sidebar_shipper.php');
@@ -32,7 +76,7 @@
 ?>
 
   <!--Main layout-->
-  <main class="pt-5" ng-view>
+  <main class="pt-5 pl-0" ng-view>
 
   </main>
   <!--Main layout-->
@@ -87,6 +131,21 @@
     }
 
   </script>
+  <script>
+function openNav() {
+  document.getElementById( "menuBtn" ).setAttribute( "onClick", "closeNav();" );
+  document.getElementById("mySidenav").style.width = "286px";
+  document.getElementById("main").style.marginLeft = "286px";
+  document.body.style.backgroundColor = "rgba(0,0,0,0.4)!important";
+}
+
+function closeNav() {
+  document.getElementById( "menuBtn" ).setAttribute( "onClick", "openNav();" );
+  document.getElementById("mySidenav").style.width = "0";
+  document.getElementById("main").style.marginLeft= "0";
+  document.body.style.backgroundColor = "white";
+}
+</script>
 <!-- Modal -->
 
 <?php

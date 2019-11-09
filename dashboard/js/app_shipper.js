@@ -48,22 +48,22 @@ cache: false,
   dataStructure['status'] = status;
   
   
-  var structure_completed = '<div id="task_'+dataStructure.id+'" class="card text-white bg-primary mb-2" style="max-width: 20rem;"><button onclick="boardDettach('+dataStructure.id+')" type="button" class="close" style="width:100%!important;padding-right:10px!important;padding-top:5px!important;position: absolute!important;"><span aria-hidden="true" class="float-right">×</span></button><a onclick="encargo_detalle('+dataStructure.id+')"><div class="card-header">'+dataStructure.Op+'</div></a></div>';
+  var structure_completed = '<div id="task_'+dataStructure.id+'" class="card text-white bg-primary mb-2" ><button onclick="boardDettach('+dataStructure.id+')" type="button" class="close" style="width:100%!important;padding-right:10px!important;padding-top:5px!important;position: absolute!important;"><span aria-hidden="true" class="float-right">×</span></button><a onclick="encargo_detalle('+dataStructure.id+')"><div class="card-header">'+dataStructure.Op+'</div></a></div>';
   if(dataStructure.status=='completed') {
     $('#complete-content').append(structure_completed);
   }
   
-  var structure_walking = '<div id="task_'+dataStructure.id+'" class="card text-white bg-success mb-2" style="max-width: 20rem;"><button onclick="boardDettach('+dataStructure.id+')" type="button" class="close" style="width:100%!important;padding-right:10px!important;padding-top:5px!important;position: absolute!important;"><span aria-hidden="true" class="float-right">×</span></button><a onclick="encargo_detalle('+dataStructure.id+')"><div class="card-header">'+dataStructure.Op+'</div></a></div>';
+  var structure_walking = '<div id="task_'+dataStructure.id+'" class="card text-white bg-success mb-2" ><button onclick="boardDettach('+dataStructure.id+')" type="button" class="close" style="width:100%!important;padding-right:10px!important;padding-top:5px!important;position: absolute!important;"><span aria-hidden="true" class="float-right">×</span></button><a onclick="encargo_detalle('+dataStructure.id+')"><div class="card-header">'+dataStructure.Op+'</div></a></div>';
   if(dataStructure.status=='walking') {
     $('#walking-content').append(structure_walking);
   }
   
-  var structure_warning = '<div id="task_'+dataStructure.id+'" class="card text-white bg-warning mb-2" style="max-width: 20rem;"><button onclick="boardDettach('+dataStructure.id+')" type="button" class="close" style="width:100%!important;padding-right:10px!important;padding-top:5px!important;position: absolute!important;"><span aria-hidden="true" class="float-right">×</span></button><a onclick="encargo_detalle('+dataStructure.id+')"><div class="card-header">'+dataStructure.Op+'</div></a></div>';
+  var structure_warning = '<div id="task_'+dataStructure.id+'" class="card text-white bg-warning mb-2" ><button onclick="boardDettach('+dataStructure.id+')" type="button" class="close" style="width:100%!important;padding-right:10px!important;padding-top:5px!important;position: absolute!important;"><span aria-hidden="true" class="float-right">×</span></button><a onclick="encargo_detalle('+dataStructure.id+')"><div class="card-header">'+dataStructure.Op+'</div></a></div>';
   if(dataStructure.status=='warning') {
     $('#verify-content').append(structure_warning);
   }
   
-  var structure_danger = '<div id="task_'+dataStructure.id+'" class="card text-white bg-danger mb-2" style="max-width: 20rem;"><button onclick="boardDettach('+dataStructure.id+')" type="button" class="close" style="width:100%!important;padding-right:10px!important;padding-top:5px!important;position: absolute!important;"><span aria-hidden="true" class="float-right">×</span></button><a onclick="encargo_detalle('+dataStructure.id+')"><div class="card-header">'+dataStructure.Op+'</div></a></div>';
+  var structure_danger = '<div id="task_'+dataStructure.id+'" class="card text-white bg-danger mb-2" ><button onclick="boardDettach('+dataStructure.id+')" type="button" class="close" style="width:100%!important;padding-right:10px!important;padding-top:5px!important;position: absolute!important;"><span aria-hidden="true" class="float-right">×</span></button><a onclick="encargo_detalle('+dataStructure.id+')"><div class="card-header">'+dataStructure.Op+'</div></a></div>';
   if(dataStructure.status=='danger') {
     $('#added-content').append(structure_danger);
   }
@@ -507,6 +507,123 @@ $(document).ready(function() {
   }, 1000);
 });
 
+
+
+function CargarEmpresa(){
+
+  $.getJSON('/backend/cargar-empresa.php', {id: usuario.id_user, _: new Date().getTime()}, function(data) {
+    var json = data;
+    $(".input_editable").empty();
+    for(var i = 0; i < json.length; i++) {
+    var obj = json[i];
+    $('#empresa').append(obj.empresa);
+    $('#telefono').append(obj.telefono);
+    $('#correo').append(obj.correo);
+    $('#pais_registro').append(obj.pais_registro);
+    $('#codigo_transportista').append(obj.codigo_transportista);
+    $('#representante_legal').append(obj.representante_legal);
+    $('#id_representante_legal').append(obj.id_representante_legal);
+    $('#id_transportista').append(obj.id_transportista);
+    $('#direccion_fiscal').append(obj.direccion_fiscal);
+    $('#paises_destino').append(obj.paises_destino);
+    $('#tarjeta_federacion').append(obj.tarjeta_federacion);
+  }
+  });
+
+}
+
+
+function EditarEmpresa(){
+
+$('.input_editable').each(function(){
+var id = $(this).attr("id");
+var content = $(this).html();
+var input = '<input type="text" class="form-control input_content" name="'+id+'_input" id="'+id+'_input" value="'+content+'">';
+$(this).empty();
+$(this).append(input);
+});
+
+
+
+$("#buttonempresa").empty();
+var buttonSave = '<a class="nav-link waves-effect" href="javascript:GuardarEmpresa();"><i class="fas fa-save" aria-hidden="true"></i> Guardar Empresa</a>';
+$("#buttonempresa").append(buttonSave);
+
+}
+
+function runSave(){
+  var empresa = {};
+  empresa['empresa'] = $('#empresa_input').val();
+  empresa['telefono'] = $('#telefono_input').val();
+  empresa['correo'] = $('#correo_input').val();
+  empresa['pais_registro'] = $('#pais_registro_input').val();
+  empresa['representante_legal'] = $('#representante_legal_input').val();
+  empresa['codigo_transportista'] = $('#codigo_transportista_input').val();
+  empresa['id_representante_legal'] = $('#id_representante_legal_input').val();
+  empresa['id_transportista'] = $('#id_transportista_input').val();
+  empresa['direccion_fiscal'] = $('#direccion_fiscal_input').val();
+  empresa['paises_destino'] = $('#paises_destino_input').val();
+  empresa['tarjeta_federacion'] = $('#tarjeta_federacion_input').val();
+
+  $('.input_editable').each(function(){
+    var id = $(this).attr("id");
+    $('#'+id+'> input').each(function(){
+      $("#"+id).empty();
+      var content = $(this).val();
+      $("#"+id).append(content);
+    });
+    });
+    
+  
+
+}
+
+
+function GuardarEmpresa(){
+  var empresa = {};
+  empresa['empresa'] = $('#empresa_input').val();
+  empresa['telefono'] = $('#telefono_input').val();
+  empresa['correo'] = $('#correo_input').val();
+  empresa['pais_registro'] = $('#pais_registro_input').val();
+  empresa['representante_legal'] = $('#representante_legal_input').val();
+  empresa['codigo_transportista'] = $('#codigo_transportista_input').val();
+  empresa['id_representante_legal'] = $('#id_representante_legal_input').val();
+  empresa['id_transportista'] = $('#id_transportista_input').val();
+  empresa['direccion_fiscal'] = $('#direccion_fiscal_input').val();
+  empresa['paises_destino'] = $('#paises_destino_input').val();
+  empresa['tarjeta_federacion'] = $('#tarjeta_federacion_input').val();
+  
+
+  $.ajax({
+    type: "POST",
+    url: "/backend/guardar_empresa.php",
+    data: {
+    id: usuario.id_user, 
+    json: JSON.stringify(empresa),
+   }, 
+    cache: false,
+
+    success: function(sucessed){
+        if(sucessed == "success") {
+            alert("Se a guardado los Datos de la Empresa Correctamente");
+            runSave();
+        }
+        if(sucessed !== "success") {
+            alert(sucessed);
+        }
+    }
+});
+
+
+
+
+  $("#buttonempresa").empty();
+  var buttonEdit = '<a class="nav-link waves-effect" href="javascript:EditarEmpresa();"><i class="fas fa-plus-square" aria-hidden="true"></i> Editar   Empresa</a>';
+  $("#buttonempresa").append(buttonEdit);
+  
+}
+
+
       var app = angular.module("myApp", ["ngRoute"]);
       app.config(function($routeProvider,$locationProvider) {
       $routeProvider
@@ -518,9 +635,6 @@ $(document).ready(function() {
       })
       .when("/historial", {
       templateUrl : "shipper/historial.html"
-      })
-      .when("/empleados", {
-      templateUrl : "shipper/empleados.html"
       })
       .when("/empresa", {
         templateUrl : "shipper/empresa.html"

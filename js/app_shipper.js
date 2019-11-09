@@ -47,15 +47,31 @@ cache: false,
   dataStructure['Op'] = nombre;
   dataStructure['status'] = status;
   
-  var structure_warning = '<div id="task_'+dataStructure.id+'" class="col-md-4 px-1 py-1 text-center"><div class="card-header" style="background-color:#FFF!important">'+dataStructure.Op+'</br><a onclick="encargo_detalle('+dataStructure.id+')" class="btn btn-blue btn-sm">Ver Detalles</a><a onclick="tomar_envio('+dataStructure.id+')" class="btn btn-blue btn-sm">Tomar Envio</a></div></div>';
+  
+  var structure_completed = '<div id="task_'+dataStructure.id+'" class="card text-white bg-primary mb-2" ><button onclick="boardDettach('+dataStructure.id+')" type="button" class="close" style="width:100%!important;padding-right:10px!important;padding-top:5px!important;position: absolute!important;"><span aria-hidden="true" class="float-right">×</span></button><a onclick="encargo_detalle('+dataStructure.id+')"><div class="card-header">'+dataStructure.Op+'</div></a></div>';
+  if(dataStructure.status=='completed') {
+    $('#complete-content').append(structure_completed);
+  }
+  
+  var structure_walking = '<div id="task_'+dataStructure.id+'" class="card text-white bg-success mb-2" ><button onclick="boardDettach('+dataStructure.id+')" type="button" class="close" style="width:100%!important;padding-right:10px!important;padding-top:5px!important;position: absolute!important;"><span aria-hidden="true" class="float-right">×</span></button><a onclick="encargo_detalle('+dataStructure.id+')"><div class="card-header">'+dataStructure.Op+'</div></a></div>';
+  if(dataStructure.status=='walking') {
+    $('#walking-content').append(structure_walking);
+  }
+  
+  var structure_warning = '<div id="task_'+dataStructure.id+'" class="card text-white bg-warning mb-2" ><button onclick="boardDettach('+dataStructure.id+')" type="button" class="close" style="width:100%!important;padding-right:10px!important;padding-top:5px!important;position: absolute!important;"><span aria-hidden="true" class="float-right">×</span></button><a onclick="encargo_detalle('+dataStructure.id+')"><div class="card-header">'+dataStructure.Op+'</div></a></div>';
   if(dataStructure.status=='warning') {
     $('#verify-content').append(structure_warning);
+  }
+  
+  var structure_danger = '<div id="task_'+dataStructure.id+'" class="card text-white bg-danger mb-2" ><button onclick="boardDettach('+dataStructure.id+')" type="button" class="close" style="width:100%!important;padding-right:10px!important;padding-top:5px!important;position: absolute!important;"><span aria-hidden="true" class="float-right">×</span></button><a onclick="encargo_detalle('+dataStructure.id+')"><div class="card-header">'+dataStructure.Op+'</div></a></div>';
+  if(dataStructure.status=='danger') {
+    $('#added-content').append(structure_danger);
   }
   
   }
 
   function board(){
-    $.getJSON('/backend/carrier-board.php', {stats: 'warning', _: new Date().getTime()}, function(data) {
+    $.getJSON('/backend/board.php', {id: usuario.id_user.valueOf(), _: new Date().getTime()}, function(data) {
     var json = data;
     if(old_json!==json) {
     $(".fichaje").empty();
@@ -72,10 +88,6 @@ cache: false,
   $('.ex').empty();
   $('#DisplayDetails > div > div > div.modal-header > h5.modal-title').empty();    
   $('#DisplayDetails > div > div > div.modal-footer').empty();
-});
-
-$("#InfoEmpresa").on('hide.bs.modal', function(){
-  $('.vacio').empty();
 });
 
 $("#EditDetails").on('hide.bs.modal', function(){
@@ -96,13 +108,13 @@ function CompletedTable(id,carga,entrega,fecha_entrega){
   dataCompleted['id'] = id;
   dataCompleted['carga'] = carga;
   dataCompleted['entrega'] = entrega;
-  dataCompleted['stats'] = ' En Curso';
+  dataCompleted['stats'] = ' Completado';
   dataCompleted['fecha_entrega'] = fecha_entrega;
   var public_complete = '<tr onclick="encargo_detalle('+dataCompleted.id+')"><td><i class="fas fa-user    "></i> '+dataCompleted.carga+'</td><td><i class="fas fa-map-marked-alt    "></i>'+dataCompleted.entrega+'</td><td><i class="fas fa-check-circle    "></i>'+dataCompleted.stats+'</td><td><i class="fas fa-calendar-alt    "></i>'+dataCompleted.fecha_entrega+'</td></tr>';
   $('#CompletedTable').append(public_complete);
 }
 function runTable(){
-$.getJSON('/backend/ordenes_en_curso.php', {id: usuario.id_user.valueOf(), _: new Date().getTime()}, function(data) {
+$.getJSON('/backend/ordenes_completadas.php', {id: usuario.id_user.valueOf(), _: new Date().getTime()}, function(data) {
     var json = data;
     if(old_json!==json) {
     $("#CompletedTable").empty();
@@ -139,7 +151,7 @@ function HistoryTable(id,carga,entrega,fecha_entrega,stats){
   $('#HistoryTable').append(public_complete);
 }
 function runHistoryTable(){
-$.getJSON('/backend/carrier-history-board.php', {id: usuario.id_user.valueOf(), _: new Date().getTime()}, function(data) {
+$.getJSON('/backend/board.php', {id: usuario.id_user.valueOf(), _: new Date().getTime()}, function(data) {
     var json = data;
     if(old_json!==json) {
     $("#HistoryTable").empty();
@@ -267,8 +279,8 @@ $.ajax({
           }
           runConductors();
         }
-        if(sucessed !== "success") {
-            alert(sucessed);
+        if(sucessed == "error") {
+            alert("Ocurrio al actualizar el estado del Conductor. Intente de Nuevo.");
         }
     }
 });  
@@ -318,8 +330,8 @@ $.ajax({
           $('#task_'+id).remove();
           board();
         }
-        if(sucessed !== "success") {
-            alert(sucessed);
+        if(sucessed == "error") {
+            alert("Ocurrio al remover al Conductor. Intente de Nuevo.");
         }
     }
 });  
@@ -328,59 +340,13 @@ $.ajax({
 
 //setInterval(runConductors, 1000);
 
-function getUnidades() {
-  $.getJSON('/backend/get_unidades.php', {id: usuario.id_user.valueOf(), _: new Date().getTime()}, function(data) {
-    var json = data;
-    $('#unidades-transporte').empty();
-      for(var i = 0; i < json.length; i++) {
-      var obj = json[i];
-      var Options = "<option value='"+obj.id+"'>"+obj.nombre+"</option>";  
-      $('#unidades-transporte').append(Options);
-    }
-  });
-}
 
-function tomando_envio(id){
-  var GenerandoEnvio = new Array();
-  GenerandoEnvio["id"] = id;
-  GenerandoEnvio["id_empresa_transporte"] = usuario['id_user'];
-  GenerandoEnvio["stats"] = 'walking';
-  GenerandoEnvio["id_unidad"] = $('#unidades-transporte').val();
-  
-  $.ajax({
-      type: "POST",
-      url: "/backend/tomar_envio.php",
-      data: {
-      id: GenerandoEnvio.id.valueOf(),
-      id_empresa_transporte: GenerandoEnvio.id_empresa_transporte.valueOf(),
-      stats: GenerandoEnvio.stats.valueOf(),
-      id_unidad: GenerandoEnvio.id_unidad.valueOf(),
-     }, 
-      cache: false,
-  
-      success: function(sucessed){
-          if(sucessed == "success") {
-              alert("La orden a sido tomada y enviada a la unidad correspondiente");
-              $('#tomar_envio').modal('hide');
-          }
-          if(sucessed !== "success") {
-              alert(sucessed);
-          }
-      }
-  });  
-}
-
-function tomar_envio(id){
-  $("#button_assign").empty();
-  getUnidades();
-  var button_assign = '<a class="btn btn-primary mx-0 w-100" href="javascript:tomando_envio('+id+')" role="button">Asignar</a>';
-  $("#button_assign").append(button_assign);
-  $('#tomar_envio').modal('show');
-}
-
-
-function encargo_detalle(id){  
-  $.getJSON('/backend/detail.php', {id: id, _: new Date().getTime()}, function(data) {
+function encargo_detalle(id){
+  var edit_button = '<a href="javascript:encargo_edit_detalle('+id+')" class="btn btn-primary">Editar Orden</a>';
+  var close_button = '<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>';
+  $('#DisplayDetails > div > div > div.modal-footer').append(edit_button);
+  $('#DisplayDetails > div > div > div.modal-footer').append(close_button);
+    $.getJSON('/backend/detail.php', {id: id, _: new Date().getTime()}, function(data) {
       var jdata = data; 
       $('#DisplayDetails > div > div > div.modal-body > div > div:nth-child(1) > p.presupuesto').append(jdata['0'].presupuesto);
       $('#DisplayDetails > div > div > div.modal-body > div > div:nth-child(1) > p.busqueda').append(jdata['0'].busqueda);
@@ -392,11 +358,8 @@ function encargo_detalle(id){
       $('#DisplayDetails > div > div > div.modal-body > div > div:nth-child(3) > p.requisitos').append(jdata['0'].requisitos);
       $('#DisplayDetails > div > div > div.modal-body > div > div:nth-child(3) > p.advertencias').append(jdata['0'].advertencias);
       $('#DisplayDetails > div > div > div.modal-header > h5.modal-title').append(jdata['0'].carga);    
-      var empresa_button = '<a href="javascript:InfoEmpresa('+jdata['0'].id_user+')" class="btn btn-primary">Acerca de la Empresa</a>';
-      $('#DisplayDetails > div > div > div.modal-footer').append(empresa_button);
-      var close_button = '<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>';
-      $('#DisplayDetails > div > div > div.modal-footer').append(close_button);
     });
+
   $('#DisplayDetails').modal('show');
 }
 function encargo_edit_detalle(id){
@@ -511,8 +474,9 @@ $.ajax({
             alert("Se a registrado la Orden Satisfactoriamente");
             $('#NewOrder').modal('hide');
         }
-        if(sucessed == "error") {
-            alert("Ocurrio al registrar la orden. Intente de Nuevo.");
+        if(sucessed !== "success") {
+          alert(sucessed);
+            //alert("Ocurrio al registrar la orden. Intente de Nuevo.");
         }
     }
 });  
@@ -539,170 +503,27 @@ if(estado=="suspendido"){
 $(document).ready(function() {
   $.ajaxSetup({ cache: false });
   setTimeout(() => {
-    runConductors();
-    CargarEmpresa();
+    runConductors();    
   }, 1000);
 });
-
-function InfoEmpresa(id){
-$('#DisplayDetails').modal('hide');
-
-  $.getJSON('/backend/cargar-empresa.php', {id: id, _: new Date().getTime()}, function(data) {
-    var json = data;
-    $(".input_editable").empty();
-    for(var i = 0; i < json.length; i++) {
-    var obj = json[i];
-    $('p.empresa').append(obj.empresa);
-    $('p.telefono').append(obj.telefono);
-    $('p.correo').append(obj.correo);
-    $('p.pais_registro').append(obj.pais_registro);
-    $('p.codigo_transportista').append(obj.codigo_transportista);
-    $('p.representante_legal').append(obj.representante_legal);
-    $('p.id_representante_legal').append(obj.id_representante_legal);
-    $('p.id_transportista').append(obj.id_transportista);
-    $('p.direccion_fiscal').append(obj.direccion_fiscal);
-    $('p.paises_destino').append(obj.paises_destino);
-    $('p.tarjeta_federacion').append(obj.tarjeta_federacion);
-  }
-  });
-
-  $("#InfoEmpresa").modal('show');
-
-}
-
-
-function CargarEmpresa(){
-
-  $.getJSON('/backend/cargar-empresa.php', {id: usuario.id_user, _: new Date().getTime()}, function(data) {
-    var json = data;
-    $(".input_editable").empty();
-    for(var i = 0; i < json.length; i++) {
-    var obj = json[i];
-    $('#empresa').append(obj.empresa);
-    $('#telefono').append(obj.telefono);
-    $('#correo').append(obj.correo);
-    $('#pais_registro').append(obj.pais_registro);
-    $('#codigo_transportista').append(obj.codigo_transportista);
-    $('#representante_legal').append(obj.representante_legal);
-    $('#id_representante_legal').append(obj.id_representante_legal);
-    $('#id_transportista').append(obj.id_transportista);
-    $('#direccion_fiscal').append(obj.direccion_fiscal);
-    $('#paises_destino').append(obj.paises_destino);
-    $('#tarjeta_federacion').append(obj.tarjeta_federacion);
-  }
-  });
-
-}
-
-
-function EditarEmpresa(){
-
-$('.input_editable').each(function(){
-var id = $(this).attr("id");
-var content = $(this).html();
-var input = '<input type="text" class="form-control input_content" name="'+id+'_input" id="'+id+'_input" value="'+content+'">';
-$(this).empty();
-$(this).append(input);
-});
-
-
-
-$("#buttonempresa").empty();
-var buttonSave = '<a class="nav-link waves-effect" href="javascript:GuardarEmpresa();"><i class="fas fa-save" aria-hidden="true"></i> Guardar Empresa</a>';
-$("#buttonempresa").append(buttonSave);
-
-}
-
-function runSave(){
-  var empresa = {};
-  empresa['empresa'] = $('#empresa_input').val();
-  empresa['telefono'] = $('#telefono_input').val();
-  empresa['correo'] = $('#correo_input').val();
-  empresa['pais_registro'] = $('#pais_registro_input').val();
-  empresa['representante_legal'] = $('#representante_legal_input').val();
-  empresa['codigo_transportista'] = $('#codigo_transportista_input').val();
-  empresa['id_representante_legal'] = $('#id_representante_legal_input').val();
-  empresa['id_transportista'] = $('#id_transportista_input').val();
-  empresa['direccion_fiscal'] = $('#direccion_fiscal_input').val();
-  empresa['paises_destino'] = $('#paises_destino_input').val();
-  empresa['tarjeta_federacion'] = $('#tarjeta_federacion_input').val();
-
-  $('.input_editable').each(function(){
-    var id = $(this).attr("id");
-    $('#'+id+'> input').each(function(){
-      $("#"+id).empty();
-      var content = $(this).val();
-      $("#"+id).append(content);
-    });
-    });
-    
-  
-
-}
-
-
-function GuardarEmpresa(){
-  var empresa = {};
-  empresa['empresa'] = $('#empresa_input').val();
-  empresa['telefono'] = $('#telefono_input').val();
-  empresa['correo'] = $('#correo_input').val();
-  empresa['pais_registro'] = $('#pais_registro_input').val();
-  empresa['representante_legal'] = $('#representante_legal_input').val();
-  empresa['codigo_transportista'] = $('#codigo_transportista_input').val();
-  empresa['id_representante_legal'] = $('#id_representante_legal_input').val();
-  empresa['id_transportista'] = $('#id_transportista_input').val();
-  empresa['direccion_fiscal'] = $('#direccion_fiscal_input').val();
-  empresa['paises_destino'] = $('#paises_destino_input').val();
-  empresa['tarjeta_federacion'] = $('#tarjeta_federacion_input').val();
-  
-
-  $.ajax({
-    type: "POST",
-    url: "/backend/guardar_empresa.php",
-    data: {
-    id: usuario.id_user, 
-    json: JSON.stringify(empresa),
-   }, 
-    cache: false,
-
-    success: function(sucessed){
-        if(sucessed == "success") {
-            alert("Se a guardado los Datos de la Empresa Correctamente");
-            runSave();
-        }
-        if(sucessed !== "success") {
-            alert(sucessed);
-        }
-    }
-});
-
-
-
-
-  $("#buttonempresa").empty();
-  var buttonEdit = '<a class="nav-link waves-effect" href="javascript:EditarEmpresa();"><i class="fas fa-plus-square" aria-hidden="true"></i> Editar   Empresa</a>';
-  $("#buttonempresa").append(buttonEdit);
-  
-}
-
 
       var app = angular.module("myApp", ["ngRoute"]);
       app.config(function($routeProvider,$locationProvider) {
       $routeProvider
       .when("/", {
-      templateUrl : "carrier/main.html"
+      templateUrl : "shipper/main.html"
       })
       .when("/encargos", {
-      templateUrl : "carrier/encargos.html"
+      templateUrl : "shipper/encargos.html"
       })
       .when("/historial", {
-      templateUrl : "carrier/historial.html"
+      templateUrl : "shipper/historial.html"
       })
-      .when("/conductores", {
-      templateUrl : "carrier/conductores.html"
+      .when("/empleados", {
+      templateUrl : "shipper/empleados.html"
       })
       .when("/empresa", {
-        templateUrl : "carrier/empresa.html"
+        templateUrl : "shipper/empresa.html"
       })
       .otherwise({
       redirectTo: "/"

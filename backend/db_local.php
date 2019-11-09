@@ -1,7 +1,7 @@
 <?php
 $servername = "localhost";
-$username = "newaccount";
-$password = "$#Upe2019";
+$username = "root";
+$password = "";
 $dbname = "upecargo";
 
 // Create connection

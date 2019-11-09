@@ -2,7 +2,7 @@
 aria-hidden="true" style="z-index: 999999999999999999999!important">
 
 <!-- Add .modal-dialog-centered to .modal-dialog to vertically center the modal -->
-<div class="modal-dialog modal-dialog-centered" role="document" style="min-width:1200px!important">
+<div class="modal-dialog modal-dialog-centered" role="document" style="max-width:1200px!important">
 
 
 <div class="modal-content">
@@ -79,7 +79,7 @@ aria-hidden="true" style="z-index: 999999999999999999999!important">
   aria-hidden="true" style="z-index: 999999999999999999999!important">
 
   <!-- Add .modal-dialog-centered to .modal-dialog to vertically center the modal -->
-  <div class="modal-dialog modal-dialog-centered" role="document" style="min-width:1200px!important">
+  <div class="modal-dialog modal-dialog-centered" role="document" style="max-width:1200px!important">
 
 
     <div class="modal-content">
@@ -124,7 +124,7 @@ aria-hidden="true" style="z-index: 999999999999999999999!important">
 aria-hidden="true" style="z-index: 999999999999999999999!important">
 
 <!-- Add .modal-dialog-centered to .modal-dialog to vertically center the modal -->
-<div class="modal-dialog modal-dialog-centered" role="document" style="min-width:1200px!important">
+<div class="modal-dialog modal-dialog-centered" role="document" style="max-width:1200px!important">
 
 
   <div class="modal-content">
@@ -171,8 +171,8 @@ aria-hidden="true" style="z-index: 999999999999999999999!important">
             <div class="form-group">
             <label for="">Estado de la Orden</label>
             <select class="form-control" id="edit_details_status">
-            <option value="danger">Agregado</option>
-            <option value="warning">Verificando</option>
+            <option value="danger">Nuevo</option>
+            <option value="warning">En Cola</option>
             <option value="walking">En Camino</option>
             <option value="completed">Completado</option>
             </select>

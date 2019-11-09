@@ -1,7 +1,8 @@
 <?php
 require('db.php');
 $id = $_POST['id'];
-$sql = sprintf("DELETE FROM ordenes WHERE id='%s'",$id);
+$json = "[".$_POST['json']."]";
+$sql = sprintf("UPDATE usuarios SET empresa_data='%s' WHERE id='%s'",$json,$id);
 $sql = urldecode($sql);
 
 if($conn->query($sql)){
