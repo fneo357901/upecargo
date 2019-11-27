@@ -1,3 +1,4 @@
+<?php include('../config.php'); ?>
 <div class="modal fade" id="InfoEmpresa" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
   aria-hidden="true" style="z-index: 999999999999999999999!important">
 
@@ -106,22 +107,23 @@
 
 
 <div class="modal fade" id="NewConductor" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-aria-hidden="true" style="z-index: 999999999999999999999!important">
+aria-hidden="true" style="z-index: 999999999999999999999!important;">
 
 <!-- Add .modal-dialog-centered to .modal-dialog to vertically center the modal -->
-<div class="modal-dialog modal-dialog-centered" role="document">
+<div class="modal-dialog modal-dialog-centered" role="document" style="max-width:1200px!important;">
 
 
   <div class="modal-content">
     <div class="modal-header">
-      <h5 class="modal-title" id="exampleModalLongTitle">Nueva Unidad</h5>
+      <h5 class="modal-title" id="exampleModalLongTitle">Nuevo Responsable</h5>
     </div>
     <div class="modal-body">
+      <div class="row">
+        <div class="col-md-6">
       <div class="form-group">
-        <label for="">Foto</label>
-        <input type="text"
-        class="form-control" id="conductor_img_url" aria-describedby="helpId" placeholder="">
-        </div>
+        <label for="">Foto de Perfil</label>
+        <input type="file" class="form-control-file" name="conductor_img" id="conductor_img" placeholder="" aria-describedby="fileHelpId">
+      </div>
         <div class="form-group">
         <label for="">Nombre</label>
         <input type="text"
@@ -132,11 +134,41 @@ aria-hidden="true" style="z-index: 999999999999999999999!important">
         <input type="text"
           class="form-control" id="conductor_telefono" aria-describedby="helpId" placeholder="">
       </div>
+      </div>
+      <div class="col-md-6">
       <div class="form-group">
         <label for="">Correo</label>
         <input type="text"
           class="form-control" id="conductor_correo" aria-describedby="helpId" placeholder="">
       </div>
+<div class="form-group">
+  <label for="">Tipo de Unidad</label>
+  <select class="form-control" name="tipo_unidad" id="tipo_unidad">
+  <?php 
+    $unidades_disponibles = explode(",", $tipo_unidad);
+    foreach($unidades_disponibles as $unidad_disponible) {
+        $resultado = "<option>" . $unidad_disponible . "</option>\n";
+        echo $resultado;
+    }
+  ?>
+  </select>
+</div>
+      <div class="form-group">
+        <label for="">Ubicacion</label>
+        <input type="text"
+          class="form-control" name="clientAddress" id="clientAddress" aria-describedby="helpId" placeholder="">
+      </div>
+      
+    </div>
+    <div class="col-md-12">
+      <div class="form-group">
+        <label for="">Contraseña de la Cuenta</label>
+        <input type="text"
+          class="form-control" id="conductor_password" aria-describedby="helpId" placeholder="">
+      </div>
+
+      </div>
+    </div>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-primary" onclick="make_a_conductor();">Guardar</button>

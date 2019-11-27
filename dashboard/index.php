@@ -1,4 +1,4 @@
-
+<?php include('../config.php'); ?>
 <?php if(isset($_GET['t'])){setcookie("account", $_GET['t']);header('Location: /dashboard/');} ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -107,8 +107,16 @@ body {
   <script type="text/javascript" src="js/bootstrap.min.js"></script>
   <!-- MDB core JavaScript -->
   <script type="text/javascript" src="js/mdb.min.js"></script>
-
-  <!--Google Maps-->
+  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=<?php echo $maps_key ?>&libraries=places&callback=initMap" async defer"></script>
+  <script>function initMap() {   var input = document.getElementById('clientAddress');
+   var autocomplete = new google.maps.places.Autocomplete(input);
+   autocomplete.addListener('place_changed', function() {
+       var place = autocomplete.getPlace();       document.getElementById('location-snap').
+       innerHTML = place.formatted_address;         document.getElementById('lat-span').
+       innerHTML = place.geometry.location.lat();       document.getElementById('lon-span').
+       innerHTML = place.geometry.location.lng();   });
+}</script>
+  <!--
   <script src="https://maps.google.com/maps/api/js"></script>
   <script>
     // Regular map
@@ -130,7 +138,7 @@ body {
       });
     }
 
-  </script>
+  </script>-->
   <script>
 function openNav() {
   document.getElementById( "menuBtn" ).setAttribute( "onClick", "closeNav();" );

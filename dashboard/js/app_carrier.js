@@ -160,26 +160,27 @@ $("#NewConductor").modal('show');
 }
 
 function make_a_conductor(){
-var nw_conductor = new Array();
-nw_conductor["img"] = $('#conductor_img_url').val();
-nw_conductor["user_id"] = usuario['id_user'];
-nw_conductor["nombre"] = $('#conductor_nombre').val();
-nw_conductor["telefono"] = $('#conductor_telefono').val();
-nw_conductor["correo"] = $('#conductor_correo').val();
-nw_conductor["estado"] = 'disponible';
+var files = $('#conductor_img')[0].files[0]; 
+var nw_conductor = new FormData();
+nw_conductor.append("user_id", usuario['id_user']);
+nw_conductor.append("nombre", $('#conductor_nombre').val());
+nw_conductor.append("telefono", $('#conductor_telefono').val());
+nw_conductor.append("correo", $('#conductor_correo').val());
+nw_conductor.append("estado", 'disponible');
+nw_conductor.append("tipo_unidad", $('#tipo_unidad').val());
+nw_conductor.append("ubicacion", $('#clientAddress').val());
+nw_conductor.append("password", $('#conductor_password').val());
+nw_conductor.append("img", files);
+
 
 $.ajax({
     type: "POST",
     url: "/backend/nuevo_conductor.php",
-    data: { 
-    img: nw_conductor.img.valueOf(),
-    user_id: nw_conductor.user_id.valueOf(),
-    nombre: nw_conductor.nombre.valueOf(),
-    telefono: nw_conductor.telefono.valueOf(),
-    correo: nw_conductor.correo.valueOf(),
-    estado: nw_conductor.estado.valueOf(),
-   }, 
-    cache: false,
+    enctype: 'multipart/form-data',
+    data: nw_conductor,
+   cache: false,
+   contentType: false, 
+   processData: false, 
 
     success: function(sucessed){
         if(sucessed == "success") {

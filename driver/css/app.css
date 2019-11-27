@@ -1,0 +1,39 @@
+body {
+    font-family: 'Raleway', sans-serif!important;
+}
+input::placeholder{
+    text-align: center!important;
+    color:#008dd5!important;
+}
+.md-form input[type="date"], .md-form input[type="datetime-local"], .md-form input[type="email"], .md-form input[type="number"], .md-form input[type="password"], .md-form input[type="search-md"], .md-form input[type="search"], .md-form input[type="tel"], .md-form input[type="text"], .md-form input[type="time"], .md-form input[type="url"], .md-form textarea.md-textarea {
+    -webkit-transition: border-color .15s ease-in-out,-webkit-box-shadow .15s ease-in-out;
+    -o-transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out,-webkit-box-shadow .15s ease-in-out;
+    outline: 0;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    border: none;
+    border-bottom: 1px solid #008dd5;
+    -webkit-border-radius: 0;
+    border-radius: 0;
+    -webkit-box-sizing: content-box;
+    box-sizing: content-box;
+    background-color: transparent;
+}
+.form-control {
+    display: block;
+    width: 100%;
+    height: calc(1.5em + .75rem + 2px);
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #008dd5!important;
+    text-align: center!important;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
