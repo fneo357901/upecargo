@@ -14,14 +14,15 @@ success: function(sucessed){
 if(sucessed !== "error") {
   var data = JSON.parse(sucessed);
   usuario['id_user'] = data.id.valueOf();
-  usuario['firstname'] = data.nombre.valueOf();
-  usuario['lastname'] = data.apellido.valueOf();
+  usuario['id'] = data.id_user.valueOf();
+  usuario['name'] = data.nombre.valueOf();
   usuario['phone'] = data.telefono.valueOf();
-  usuario['email'] = data.email.valueOf();
-  usuario['type'] = data.tipo.valueOf();
+  usuario['email'] = data.correo.valueOf();  
+  usuario['zone'] = data.ubicacion.valueOf();
+  usuario['type'] = data.tipo_unidad.valueOf();
 }
 if(sucessed == "error") {
-  window.location.href = "/driver";
+  window.location.href = "/";
 }
 }
 }); 
@@ -55,7 +56,7 @@ cache: false,
   }
 
   function board(){
-    $.getJSON('/backend/carrier-board.php', {stats: 'warning', _: new Date().getTime()}, function(data) {
+    $.getJSON('/backend/conductor-board.php', {stats: 'warning', id_user: usuario.id_user, _: new Date().getTime()}, function(data) {
     var json = data;
     if(old_json!==json) {
     $(".fichaje").empty();
@@ -139,7 +140,7 @@ function HistoryTable(id,carga,entrega,fecha_entrega,stats){
   $('#HistoryTable').append(public_complete);
 }
 function runHistoryTable(){
-$.getJSON('/backend/carrier-history-board.php', {id: usuario.id_user.valueOf(), _: new Date().getTime()}, function(data) {
+$.getJSON('/backend/conductor-history-board.php', {id: usuario.id_user.valueOf(), _: new Date().getTime()}, function(data) {
     var json = data;
     if(old_json!==json) {
     $("#HistoryTable").empty();
@@ -329,53 +330,158 @@ $.ajax({
 
 //setInterval(runConductors, 1000);
 
-function getUnidades() {
-  $.getJSON('/backend/get_unidades.php', {id: usuario.id_user.valueOf(), _: new Date().getTime()}, function(data) {
-    var json = data;
-    $('#unidades-transporte').empty();
-      for(var i = 0; i < json.length; i++) {
-      var obj = json[i];
-      var Options = "<option value='"+obj.id+"'>"+obj.nombre+"</option>";  
-      $('#unidades-transporte').append(Options);
-    }
-  });
-}
+//function getUnidades() {
+//  $.getJSON('/backend/get_unidades.php', {id: usuario.id_user.valueOf(), _: new Date().getTime()}, function(data) {
+//    var json = data;
+//    $('#unidades-transporte').empty();
+//      for(var i = 0; i < json.length; i++) {
+//      var obj = json[i];
+//      var Options = "<option value='"+obj.id+"'>"+obj.nombre+"</option>";  
+//      $('#unidades-transporte').append(Options);
+//    }
+//  });
+//}
 
-function tomando_envio(id){
+tracking_status = "started";
+seconds_live = 0;
+
+function confirmar(id){
   var GenerandoEnvio = new Array();
   GenerandoEnvio["id"] = id;
-  GenerandoEnvio["id_empresa_transporte"] = usuario['id_user'];
   GenerandoEnvio["stats"] = 'walking';
-  GenerandoEnvio["id_unidad"] = $('#unidades-transporte').val();
   
   $.ajax({
       type: "POST",
-      url: "/backend/tomar_envio.php",
+      url: "/backend/tomar_envio_conductor.php",
       data: {
       id: GenerandoEnvio.id.valueOf(),
-      id_empresa_transporte: GenerandoEnvio.id_empresa_transporte.valueOf(),
       stats: GenerandoEnvio.stats.valueOf(),
-      id_unidad: GenerandoEnvio.id_unidad.valueOf(),
      }, 
       cache: false,
   
       success: function(sucessed){
           if(sucessed == "success") {
-              alert("La orden a sido tomada y enviada a la unidad correspondiente");
-              $('#tomar_envio').modal('hide');
           }
           if(sucessed !== "success") {
               alert(sucessed);
           }
       }
-  });  
+  }); 
+  button_change(id);
+}
+
+function action_tracking(id) {
+  
+  function getLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(showPosition);
+    } else { 
+      alert("Rastreo no soportado por el navegador.");
+    }
+  }
+
+  function showPosition(position) {
+    function sec2time(timeInSeconds) {
+      var pad = function(num, size) { return ('000' + num).slice(size * -1); },
+      time = parseFloat(timeInSeconds).toFixed(3),
+      hours = Math.floor(time / 60 / 60),
+      minutes = Math.floor(time / 60) % 60,
+      seconds = Math.floor(time - minutes * 60),
+      milliseconds = time.slice(-3);
+  
+      return pad(hours, 2) + ':' + pad(minutes, 2) + ':' + pad(seconds, 2);
+  }
+    $("#content_tracking").empty();
+    seconds_live++;
+    send_coor(id,position.coords.latitude,position.coords.longitude,seconds_live);
+    $("#content_tracking").append(sec2time(seconds_live));
+  }
+
+getLocation();
+
+}
+
+
+function send_coor(id,latitud,longitud,tiempo){
+  $.ajax({
+    type: "POST",
+    url: "/backend/envio_coordenadas_conductor.php",
+    data: {
+    id: id,
+    latitud: latitud,
+    longitud: longitud,
+    tiempo: tiempo,
+   }, 
+    cache: false,
+
+    success: function(sucessed){
+        if(sucessed == "success") {
+
+        }
+        if(sucessed !== "success") {
+            alert(sucessed);
+        }
+    }
+});  
+}
+
+function start(id){
+  setInterval(() => {
+    if(tracking_status==="started") {
+    action_tracking(id);
+  }
+  }, 1000);
+}
+
+function button_change(id){
+  $("#button_assign").empty();
+  var button_assign = '<a class="btn btn-primary mx-0 w-100" href="javascript:complete('+id+');" role="button">Finalizar Trayecto</a>';
+  $("#button_assign").append(button_assign);
+  start(id);
+}
+
+function complete(id){
+
+delete tracking_status;
+delete seconds_live;
+
+var GenerandoEnvio = new Array();
+  GenerandoEnvio["id"] = id;
+  GenerandoEnvio["stats"] = 'completed';
+  
+  $.ajax({
+      type: "POST",
+      url: "/backend/tomar_envio_conductor.php",
+      data: {
+      id: GenerandoEnvio.id.valueOf(),
+      stats: GenerandoEnvio.stats.valueOf(),
+     }, 
+      cache: false,
+  
+      success: function(sucessed){
+          if(sucessed == "success") {
+            $('#tomar_envio').modal('hide');
+            location.reload();
+          }
+          if(sucessed !== "success") {
+              alert(sucessed);
+          }
+      }
+  }); 
+}
+
+function tracking(id){
+confirmar(id);
 }
 
 function tomar_envio(id){
   $("#button_assign").empty();
-  getUnidades();
-  var button_assign = '<a class="btn btn-primary mx-0 w-100" href="javascript:tomando_envio('+id+')" role="button">Asignar</a>';
+  var button_assign = '<a class="btn btn-primary mx-0 w-100" href="javascript:tracking('+id+');" role="button">Comenzar Trayecto</a>';
   $("#button_assign").append(button_assign);
+  $("#tomar_envio").modal({
+      backdrop: 'static',
+      keyboard: false
+  });
   $('#tomar_envio').modal('show');
 }
 
@@ -574,7 +680,7 @@ $('#DisplayDetails').modal('hide');
 
 function CargarEmpresa(){
 
-  $.getJSON('/backend/cargar-empresa.php', {id: usuario.id_user, _: new Date().getTime()}, function(data) {
+  $.getJSON('/backend/cargar-empresa.php', {id: usuario.id, _: new Date().getTime()}, function(data) {
     var json = data;
     $(".input_editable").empty();
     for(var i = 0; i < json.length; i++) {
@@ -592,7 +698,7 @@ function CargarEmpresa(){
     $('#tarjeta_federacion').append(obj.tarjeta_federacion);
   }
   });
-
+  closeNav();
 }
 
 

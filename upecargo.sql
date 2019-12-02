@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 27-11-2019 a las 04:35:57
+-- Tiempo de generación: 02-12-2019 a las 05:59:49
 -- Versión del servidor: 10.4.8-MariaDB
 -- Versión de PHP: 7.3.11
 
@@ -59,18 +59,20 @@ CREATE TABLE `ordenes` (
   `advertencias` text COLLATE utf8_spanish_ci NOT NULL,
   `entrega` text COLLATE utf8_spanish_ci NOT NULL,
   `id_empleado` int(11) NOT NULL,
-  `id_empresa_transporte` int(11) NOT NULL
+  `id_empresa_transporte` int(11) NOT NULL,
+  `latitud` text COLLATE utf8_spanish_ci NOT NULL,
+  `longitud` text COLLATE utf8_spanish_ci NOT NULL,
+  `tiempo` text COLLATE utf8_spanish_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 --
 -- Volcado de datos para la tabla `ordenes`
 --
 
-INSERT INTO `ordenes` (`id`, `id_user`, `stats`, `presupuesto`, `busqueda`, `fecha_recogida`, `fecha_entrega`, `id_unidad`, `transport_type`, `carga`, `requisitos`, `advertencias`, `entrega`, `id_empleado`, `id_empresa_transporte`) VALUES
-(21, 8, 'completed', 'TEST', 'TEST', 'TEST', 'TEST', 10, 'TEST', 'TEST', 'TEST', 'TEST', 'TEST', 0, 7),
-(22, 12, 'danger', '1000', 'san jose', '11-11-19', '15-11-19', 0, '24', 'CONDIMENTOS', 'CAMION SIN OLORES', ' NA', 'managua', 0, 0),
-(23, 12, 'danger', '1000', 'san jose', '11-11-19', '15-11-19', 0, '24', 'CONDIMENTOS', 'CAMION SIN OLORES', ' NA', 'managua', 0, 0),
-(24, 12, 'walking', '1000', 'SAN JOSE', '11-11-19', '15-11-19', 11, '24', 'TEST ', 'TEST', 'TEST', 'MANAGUA', 0, 11);
+INSERT INTO `ordenes` (`id`, `id_user`, `stats`, `presupuesto`, `busqueda`, `fecha_recogida`, `fecha_entrega`, `id_unidad`, `transport_type`, `carga`, `requisitos`, `advertencias`, `entrega`, `id_empleado`, `id_empresa_transporte`, `latitud`, `longitud`, `tiempo`) VALUES
+(29, 8, 'completed', '1000', '1000', '1000', '1000', 38, '1000', '1000', '1000', '1000', '1000', 0, 7, '6.42375', '-68.58973', '38'),
+(30, 8, 'walking', '1000', '1000', '1000', '1000', 38, '1000', '1000', '1000', '1000', '1000', 0, 7, '6.42375', '-67.58973', '38'),
+(31, 8, 'completed', '1000', '1000', '1000', '1000', 38, '1000', '1000', '1000', '1000', '1000', 0, 7, '6.42375', '-64.98973', '38');
 
 -- --------------------------------------------------------
 
@@ -96,7 +98,7 @@ CREATE TABLE `unidades_carrier` (
 --
 
 INSERT INTO `unidades_carrier` (`id`, `id_user`, `nombre`, `telefono`, `correo`, `img`, `estado`, `passwordx`, `ubicacion`, `tipo_unidad`) VALUES
-(37, 7, 'Fabian Perdomo', '04129807100', 'fneo3579@gmail.com', '../media/fa2d3d8d-9b6c-4df4-af95-f4fa760e3c5c-2t4a9501.JPG', 'disponible', '$#Edu1597', 'Caracas, Venezuela', 'R4');
+(38, 7, 'Fabian Perdomo', '04129807100', 'fneo3579@gmail.com', '../media/71845510_1449995278491324_8740027897505339794_n.jpg', 'en_camino', '$#Edu1597', 'Caracas', 'S300');
 
 -- --------------------------------------------------------
 
@@ -168,13 +170,13 @@ ALTER TABLE `empleados_shipper`
 -- AUTO_INCREMENT de la tabla `ordenes`
 --
 ALTER TABLE `ordenes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT de la tabla `unidades_carrier`
 --
 ALTER TABLE `unidades_carrier`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`

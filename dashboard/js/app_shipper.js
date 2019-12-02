@@ -21,7 +21,7 @@ if(sucessed !== "error") {
   usuario['type'] = data.tipo.valueOf();
 }
 if(sucessed == "error") {
-  window.location.href = "/login";
+  window.location.href = "/";
 }
 }
 }); 
@@ -108,7 +108,7 @@ function CompletedTable(id,carga,entrega,fecha_entrega){
   dataCompleted['id'] = id;
   dataCompleted['carga'] = carga;
   dataCompleted['entrega'] = entrega;
-  dataCompleted['stats'] = ' Completado';
+  dataCompleted['stats'] = ' En Curso';
   dataCompleted['fecha_entrega'] = fecha_entrega;
   var public_complete = '<tr onclick="encargo_detalle('+dataCompleted.id+')"><td><i class="fas fa-user    "></i> '+dataCompleted.carga+'</td><td><i class="fas fa-map-marked-alt    "></i>'+dataCompleted.entrega+'</td><td><i class="fas fa-check-circle    "></i>'+dataCompleted.stats+'</td><td><i class="fas fa-calendar-alt    "></i>'+dataCompleted.fecha_entrega+'</td></tr>';
   $('#CompletedTable').append(public_complete);
@@ -503,7 +503,7 @@ if(estado=="suspendido"){
 $(document).ready(function() {
   $.ajaxSetup({ cache: false });
   setTimeout(() => {
-    runConductors();    
+    initMap();    
   }, 1000);
 });
 
@@ -529,7 +529,7 @@ function CargarEmpresa(){
     $('#tarjeta_federacion').append(obj.tarjeta_federacion);
   }
   });
-
+  closeNav();
 }
 
 
@@ -622,6 +622,86 @@ function GuardarEmpresa(){
   $("#buttonempresa").append(buttonEdit);
   
 }
+
+
+
+
+var map, infoWindow;
+var markers = [];
+var bounds;
+
+function initMap() {
+  map = new google.maps.Map(document.getElementById('map'), {
+    center:{lat:9.7880295,lng:-84.0476485},
+    zoom: 9,
+    maxZoom: 9,
+  });
+}
+function addInfoWindow(lat,lng,title){
+
+  var contentString = '<div id="content">'+
+      '<div id="siteNotice">'+
+      '</div>'+
+      '<h1 id="firstHeading" class="firstHeading">'+title+'</h1>'+
+      '</div>';
+
+  var infowindow = new google.maps.InfoWindow({
+    content: contentString
+  });
+
+  var marker = new google.maps.Marker({
+    position: new google.maps.LatLng(lat,lng),
+    map: map,
+    title: title
+  });
+  marker.addListener('click', function() {
+    infowindow.open(map, marker);
+  });
+  markers.push(marker);
+  bounds = new google.maps.LatLngBounds();
+  bounds.extend(marker.position);
+  map.fitBounds(bounds);
+
+}
+
+
+// Sets the map on all markers in the array.
+function setMapOnAll(map) {
+  for (var i = 0; i < markers.length; i++) {
+    markers[i].setMap(map);
+  }
+}
+
+// Removes the markers from the map, but keeps them in the array.
+function clearMarkers() {
+  setMapOnAll(null);
+}
+
+// Shows any markers currently in the array.
+function showMarkers() {
+  setMapOnAll(map);
+}
+
+// Deletes all markers in the array by removing references to them.
+function deleteMarkers() {
+  clearMarkers();
+  markers = [];
+}
+
+
+
+setInterval(() => {
+  deleteMarkers();
+  $.getJSON('/backend/pedidos_en_curso-shipper.php', {id: usuario.id_user, stats: 'walking', _: new Date().getTime()}, function(data) {
+  var json = data;
+  for(var i = 0; i < json.length; i++) {
+  var obj = json[i];
+  addInfoWindow(obj.lat,obj.lng,obj.title);
+  }
+  });
+}, 5000);
+
+
 
 
       var app = angular.module("myApp", ["ngRoute"]);

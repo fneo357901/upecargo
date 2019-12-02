@@ -60,6 +60,16 @@ html, body {
 body {
   position: relative;
 }
+
+#menuBtn {
+position:fixed!important;
+}
+
+.navbar.scrolling-navbar.top-nav-collapse {
+    transition: background .5s ease-in-out,padding .5s ease-in-out;
+    padding-top: 12px;
+    padding-bottom: 12px;
+}
 </style>
 <body class="grey lighten-3" ng-app="myApp" style="overflow-x:hidden!important;">
 <span id="menuBtn" style="font-size:30px;cursor:pointer;z-index:99999999 !important;/*! padding-top: .75rem !important; */position: absolute;/*! float: left !important; */left: 24px;display: flex !important;" class="float-left pt-2" onclick="openNav();">☰</span>

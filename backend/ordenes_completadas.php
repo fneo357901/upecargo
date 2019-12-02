@@ -2,7 +2,7 @@
 require('db.php');
 
 $id_user = $_GET['id'];
-$sql = sprintf("SELECT * from ordenes WHERE id_user='%s' AND stats='%s'",$id_user,'completed');
+$sql = sprintf("SELECT * from ordenes WHERE id_user='%s' AND stats='%s'",$id_user,'walking');
 $sql = urldecode($sql);
 
 $result = $conn->query($sql);

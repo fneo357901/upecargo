@@ -62,6 +62,16 @@ html, body {
 body {
   position: relative;
 }
+
+#menuBtn {
+position:fixed!important;
+}
+
+.navbar.scrolling-navbar.top-nav-collapse {
+    transition: background .5s ease-in-out,padding .5s ease-in-out;
+    padding-top: 12px;
+    padding-bottom: 12px;
+}
 </style>
 <body class="grey lighten-3" ng-app="myApp" style="overflow-x:hidden!important;">
 <span id="menuBtn" style="font-size:30px;cursor:pointer;z-index:99999999 !important;/*! padding-top: .75rem !important; */position: absolute;/*! float: left !important; */left: 24px;display: flex !important;" class="float-left pt-2" onclick="openNav();">☰</span>
@@ -85,7 +95,14 @@ body {
   <!-- JQuery -->
   <script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
   
-  <?php
+  <script type="text/javascript" src="js/popper.min.js"></script>
+  <!-- Bootstrap core JavaScript -->
+  <script type="text/javascript" src="js/bootstrap.min.js"></script>
+  <!-- MDB core JavaScript -->
+  <script type="text/javascript" src="js/mdb.min.js"></script>
+    <script async defer 
+    src="https://maps.googleapis.com/maps/api/js?key=<?php echo $maps_key ?>"></script>
+    <?php
   if($_COOKIE['account']=='shipper'){ ?>
 
 <script src="./js/app_shipper.js"></script>
@@ -101,44 +118,6 @@ body {
 <?php
   }
 ?>
-  
-  <script type="text/javascript" src="js/popper.min.js"></script>
-  <!-- Bootstrap core JavaScript -->
-  <script type="text/javascript" src="js/bootstrap.min.js"></script>
-  <!-- MDB core JavaScript -->
-  <script type="text/javascript" src="js/mdb.min.js"></script>
-  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=<?php echo $maps_key ?>&libraries=places&callback=initMap" async defer"></script>
-  <script>function initMap() {   var input = document.getElementById('clientAddress');
-   var autocomplete = new google.maps.places.Autocomplete(input);
-   autocomplete.addListener('place_changed', function() {
-       var place = autocomplete.getPlace();       document.getElementById('location-snap').
-       innerHTML = place.formatted_address;         document.getElementById('lat-span').
-       innerHTML = place.geometry.location.lat();       document.getElementById('lon-span').
-       innerHTML = place.geometry.location.lng();   });
-}</script>
-  <!--
-  <script src="https://maps.google.com/maps/api/js"></script>
-  <script>
-    // Regular map
-    function regular_map() {
-      var var_location = new google.maps.LatLng(40.725118, -73.997699);
-
-      var var_mapoptions = {
-        center: var_location,
-        zoom: 14
-      };
-
-      var var_map = new google.maps.Map(document.getElementById("map-container"),
-        var_mapoptions);
-
-      var var_marker = new google.maps.Marker({
-        position: var_location,
-        map: var_map,
-        title: "New York"
-      });
-    }
-
-  </script>-->
   <script>
 function openNav() {
   document.getElementById( "menuBtn" ).setAttribute( "onClick", "closeNav();" );

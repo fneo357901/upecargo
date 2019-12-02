@@ -188,7 +188,7 @@ aria-hidden="true" style="z-index: 999999999999999999999!important">
 
   <div class="modal-content">
     <div class="modal-header">
-      <h5 class="modal-title" id="exampleModalLongTitle">Asignar Unidad</h5>
+      <h5 class="modal-title" id="exampleModalLongTitle">Rastreo de Unidad</h5>
     </div>
     <div class="modal-body">
         <div class="row">
@@ -196,9 +196,10 @@ aria-hidden="true" style="z-index: 999999999999999999999!important">
             </div>
           <div class="col-md-8">
                   <div class="form-group">
-                    <label for="">Unidades</label>
-                    <select class="form-control" name="unidades-transporte" id="unidades-transporte">
-                    </select>
+                  <img src="/driver/dashboard/img/tracking.png" class="img-fluid">
+                  <div style="width:100%!important;text-align:center!important;">Tiempo Total de Rastreo</div>
+                  <div id="content_tracking" style="font-size: 4rem !important;
+text-align: center;">00:00:00</div>
                   <div id="button_assign" name="button_assign"></div>
             </div>
             </div>

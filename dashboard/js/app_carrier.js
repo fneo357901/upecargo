@@ -21,7 +21,7 @@ if(sucessed !== "error") {
   usuario['type'] = data.tipo.valueOf();
 }
 if(sucessed == "error") {
-  window.location.href = "/login";
+  window.location.href = "/";
 }
 }
 }); 
@@ -48,14 +48,14 @@ cache: false,
   dataStructure['status'] = status;
   
   var structure_warning = '<div id="task_'+dataStructure.id+'" class="col-md-4 px-1 py-1 text-center"><div class="card-header" style="background-color:#FFF!important">'+dataStructure.Op+'</br><a onclick="encargo_detalle('+dataStructure.id+')" class="btn btn-blue btn-sm">Ver Detalles</a><a onclick="tomar_envio('+dataStructure.id+')" class="btn btn-blue btn-sm">Tomar Envio</a></div></div>';
-  if(dataStructure.status=='warning') {
+  if(dataStructure.status=='danger') {
     $('#verify-content').append(structure_warning);
   }
   
   }
 
   function board(){
-    $.getJSON('/backend/carrier-board.php', {stats: 'warning', _: new Date().getTime()}, function(data) {
+    $.getJSON('/backend/carrier-board.php', {stats: 'danger', _: new Date().getTime()}, function(data) {
     var json = data;
     if(old_json!==json) {
     $(".fichaje").empty();
@@ -226,6 +226,7 @@ $.getJSON('/backend/display_conductor.php', {id: usuario.id_user.valueOf(), _: n
   }
     var old_json = json;
   });
+  closeNav();
 }
 
 function ConductorEditEstado(estado,id){
@@ -345,7 +346,7 @@ function tomando_envio(id){
   var GenerandoEnvio = new Array();
   GenerandoEnvio["id"] = id;
   GenerandoEnvio["id_empresa_transporte"] = usuario['id_user'];
-  GenerandoEnvio["stats"] = 'walking';
+  GenerandoEnvio["stats"] = 'warning';
   GenerandoEnvio["id_unidad"] = $('#unidades-transporte').val();
   
   $.ajax({
@@ -540,6 +541,7 @@ if(estado=="suspendido"){
 $(document).ready(function() {
   $.ajaxSetup({ cache: false });
   setTimeout(() => {
+    initMap();
     runConductors();
     CargarEmpresa();
   }, 1000);
@@ -592,7 +594,7 @@ function CargarEmpresa(){
     $('#tarjeta_federacion').append(obj.tarjeta_federacion);
   }
   });
-
+  closeNav();
 }
 
 
@@ -678,13 +680,89 @@ function GuardarEmpresa(){
 });
 
 
-
-
   $("#buttonempresa").empty();
   var buttonEdit = '<a class="nav-link waves-effect" href="javascript:EditarEmpresa();"><i class="fas fa-plus-square" aria-hidden="true"></i> Editar   Empresa</a>';
   $("#buttonempresa").append(buttonEdit);
   
 }
+
+/////////////////////////////////////// MAP TRACKING /////////////////////////////////////////
+
+var map, infoWindow;
+var markers = [];
+
+function initMap() {
+  map = new google.maps.Map(document.getElementById('map'), {
+    center:{lat:9.7880295,lng:-84.0476485},
+    zoom: 9,
+    maxZoom: 9
+  });
+  closeNav();
+}
+function addInfoWindow(lat,lng,title){
+
+  var contentString = '<div id="content">'+
+      '<div id="siteNotice">'+
+      '</div>'+
+      '<h1 id="firstHeading" class="firstHeading">'+title+'</h1>'+
+      '</div>';
+
+  var infowindow = new google.maps.InfoWindow({
+    content: contentString
+  });
+
+  var marker = new google.maps.Marker({
+    position: new google.maps.LatLng(lat,lng),
+    map: map,
+    title: title
+  });
+  marker.addListener('click', function() {
+    infowindow.open(map, marker);
+  });
+  markers.push(marker);
+  bounds = new google.maps.LatLngBounds();
+  bounds.extend(marker.position);
+  map.fitBounds(bounds);
+}
+
+
+// Sets the map on all markers in the array.
+function setMapOnAll(map) {
+  for (var i = 0; i < markers.length; i++) {
+    markers[i].setMap(map);
+  }
+}
+
+// Removes the markers from the map, but keeps them in the array.
+function clearMarkers() {
+  setMapOnAll(null);
+}
+
+// Shows any markers currently in the array.
+function showMarkers() {
+  setMapOnAll(map);
+}
+
+// Deletes all markers in the array by removing references to them.
+function deleteMarkers() {
+  clearMarkers();
+  markers = [];
+}
+
+
+
+setInterval(() => {
+  deleteMarkers();
+  $.getJSON('/backend/pedidos_en_curso-carrier.php', {id: usuario.id_user, stats: 'walking', _: new Date().getTime()}, function(data) {
+  var json = data;
+  for(var i = 0; i < json.length; i++) {
+  var obj = json[i];
+  addInfoWindow(obj.lat,obj.lng,obj.title);
+  }
+  });
+}, 5000);
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
       var app = angular.module("myApp", ["ngRoute"]);
