@@ -3,8 +3,8 @@
 include("functions.php");
 
 $servername = "localhost";
-$username = "root";
-$password = "";
+$username = "newaccount";
+$password = "$#Upe2019";
 $dbname = "upecargo";
 
 // Create connection
