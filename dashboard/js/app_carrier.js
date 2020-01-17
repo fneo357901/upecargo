@@ -160,7 +160,15 @@ $("#NewConductor").modal('show');
 }
 
 function make_a_conductor(){
-var files = $('#conductor_img')[0].files[0]; 
+
+var profile = $('#conductor_img')[0].files[0]; 
+var PUR_img = $('#PUR_img')[0].files[0]; 
+var TC_img = $('#TC_img')[0].files[0]; 
+var PSP_img = $('#PSP_img')[0].files[0]; 
+var LC_img = $('#LC_img')[0].files[0]; 
+var TF_img = $('#TF_img')[0].files[0];
+var TCV_img = $('#TCV_img')[0].files[0]; 
+
 var nw_conductor = new FormData();
 nw_conductor.append("user_id", usuario['id_user']);
 nw_conductor.append("nombre", $('#conductor_nombre').val());
@@ -170,7 +178,23 @@ nw_conductor.append("estado", 'disponible');
 nw_conductor.append("tipo_unidad", $('#tipo_unidad').val());
 nw_conductor.append("ubicacion", $('#clientAddress').val());
 nw_conductor.append("password", $('#conductor_password').val());
-nw_conductor.append("img", files);
+
+nw_conductor.append("PUR", $('#PUR_id').val());
+nw_conductor.append("TC", $('#TC_id').val());
+nw_conductor.append("PSP", $('#PSP_id').val());
+nw_conductor.append("LC", $('#LC_id').val());
+nw_conductor.append("TF", $('#TF_id').val());
+nw_conductor.append("TCV", $('#TCV_id').val());
+
+
+nw_conductor.append("profile", profile);
+
+nw_conductor.append("PUR_img", PUR_img);
+nw_conductor.append("TC_img", TC_img);
+nw_conductor.append("PSP_img", PSP_img);
+nw_conductor.append("LC_img", LC_img);
+nw_conductor.append("TF_img", TF_img);
+nw_conductor.append("TCV_img", TCV_img);
 
 
 $.ajax({
@@ -188,20 +212,27 @@ $.ajax({
             $('#NewConductor').modal('hide');
             runConductors();
         }
-        if(sucessed == "error") {
-            alert("Ocurrio al registrar el Conductor. Intente de Nuevo.");
+        if(sucessed !== "success") {
+            alert(sucessed);
         }
     }
 });  
 }
 
-function ConductorCard(id,nombre,telefono,correo,img,estado){
+function ConductorCard(id,nombre,telefono,correo,img,estado,pur,tc,psp,lc,tf,tcv){
   var CardConductor = new Array();
   CardConductor['id'] = id;
   CardConductor['nombre'] = nombre;
   CardConductor['telefono'] = telefono;
   CardConductor['correo'] = correo;
   CardConductor['img'] = img;
+  CardConductor['pur'] = pur;
+  CardConductor['tc'] = tc;
+  CardConductor['psp'] = psp;
+  CardConductor['lc'] = lc;
+  CardConductor['tf'] = tf;
+  CardConductor['tcv'] = tcv;
+
     if(estado=='disponible'){
       CardConductor['estado'] = '<tr id="ConductorEstadoDisplay_'+CardConductor.id+'"><th onclick="ConductorEditEstado(\''+estado+'\',\''+CardConductor.id+'\');" class="py-2" style="color:rgb(0,255,0);"><i class="fas fa-check"></i> Disponible</th></tr>';
     }
@@ -211,7 +242,7 @@ function ConductorCard(id,nombre,telefono,correo,img,estado){
     if(estado=='suspendido'){
       CardConductor['estado'] = '<tr id="ConductorEstadoDisplay_'+CardConductor.id+'"><th onclick="ConductorEditEstado(\''+estado+'\',\''+CardConductor.id+'\');" class="py-2" style="color: red;"><i class="fas fa-backspace"></i> Suspendido</th></tr>';
     }
-  var print_card = '<div class="col-md-6 mb-4 conductor '+estado+' Conductor_'+CardConductor.id+'"><div class="card"><button type="button" onclick="DettachConductor(\''+CardConductor.id+'\');" class="close" style="width:100%!important;padding-right:10px!important;padding-top:5px!important;position: absolute!important;"><span aria-hidden="true" class="float-right">×</span></button><div class="card-body"><div class="avatar white col-md-4 py-0 float-left pt-2"><img src="'+CardConductor.img+'" class="rounded-circle w-100" alt="woman avatar"></div><table class="table table-hover col-md-8 float-right mb-0"><tbody><tr><th class="py-2"><i class="fas fa-user    "></i> '+CardConductor.nombre+'</th></tr><tr><th class="py-2"><i class="fas fa-phone    "></i> '+CardConductor.telefono+'</th></tr><tr><th class="py-2"><i class="fas fa-envelope    "></i> '+CardConductor.correo+'</th></tr>'+CardConductor.estado+'</tbody></table></div></div></div>';;
+  var print_card = '<div class="col-md-6 mb-4 conductor '+estado+' Conductor_'+CardConductor.id+'"> <div class="card"> <button type="button" onclick=\"DettachConductor(\''+CardConductor.id+'\');\" class="close" style="width:100%!important;padding-right:10px!important;padding-top:5px!important;position: absolute!important;"><span aria-hidden="true" class="float-right">×</span></button> <div class="card-body"> <div class="avatar white col-md-4 py-0 float-left pt-2"><img src="'+CardConductor.img+'" class="rounded-circle w-100" alt="woman avatar"></div><table class="table table-hover col-md-8 float-right mb-0"> <tbody> <tr> <th class="py-2"><i class="fas fa-user "></i> '+CardConductor.nombre+'</th> </tr><tr> <th class="py-2"><i class="fas fa-phone "></i> '+CardConductor.telefono+'</th> </tr><tr> <th class="py-2"><i class="fas fa-envelope "></i> '+CardConductor.correo+'</th> </tr>'+CardConductor.estado+' </tbody> </table><div> <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapse_'+CardConductor.id+'" aria-expanded="false" aria-controls="collapse_'+CardConductor.id+'"> Documentacion </button></div><div class="collapse" id="collapse_'+CardConductor.id+'"> <div class="mt-3"><table class="table table-hover col-md-8 float-right mb-0"> <tbody> <tr> <th class="py-2"><a href="'+CardConductor.pur+'" target="_blank">Placa Unica de Rodaje</a></th> </tr><tr> <th class="py-2"><a href="'+CardConductor.tc+'" target="_blank">Tarjeta de Circulacion</a></th> </tr><tr> <th class="py-2"><a href="'+CardConductor.psp+'" target="_blank">Pasaporte</a></th> </tr><tr> <th class="py-2"><a href="'+CardConductor.lc+'" target="_blank">Licencia de Conducir</a></th> </tr><tr> <th class="py-2"><a href="'+CardConductor.tf+'" target="_blank">Tarjeta de Federacion</a></th> </tr><tr> <th class="py-2"><a href="'+CardConductor.tcv+'" target="_blank">Tarjeta de Circulacion de Vagon</a></th> </tr></tbody> </table> </div></div></div></div></div></div>';
   $('#Conductors').append(print_card);
 }
 function runConductors(){
@@ -221,7 +252,7 @@ $.getJSON('/backend/display_conductor.php', {id: usuario.id_user.valueOf(), _: n
       $("#Conductors").empty();
       for(var i = 0; i < json.length; i++) {
       var obj = json[i];
-      ConductorCard(obj.id,obj.nombre,obj.telefono,obj.correo,obj.img,obj.estado);
+      ConductorCard(obj.id,obj.nombre,obj.telefono,obj.correo,obj.img,obj.estado,obj.PUR_img,obj.TC_img,obj.PSP_img,obj.LC_img,obj.TF_img,obj.TCV_img);
     }
   }
     var old_json = json;
@@ -364,6 +395,7 @@ function tomando_envio(id){
           if(sucessed == "success") {
               alert("La orden a sido tomada y enviada a la unidad correspondiente");
               $('#tomar_envio').modal('hide');
+              location.reload();
           }
           if(sucessed !== "success") {
               alert(sucessed);
@@ -573,6 +605,11 @@ $('#DisplayDetails').modal('hide');
 
 }
 
+$(document).ready(function() {
+  $.ajaxSetup({ cache: false });
+});
+
+
 
 function CargarEmpresa(){
 
@@ -592,23 +629,50 @@ function CargarEmpresa(){
     $('#direccion_fiscal').append(obj.direccion_fiscal);
     $('#paises_destino').append(obj.paises_destino);
     $('#tarjeta_federacion').append(obj.tarjeta_federacion);
+    $('#img_empresa').attr("src",obj.img_one);
+    $('#img_id_rep').attr("src",obj.img_two);
   }
   });
   closeNav();
 }
 
+function sleeping(){
+  clearInterval(running_app);
+}
+
+function perfectTimer(){
+setTimeout(sleeping,2000);
+  if(window.location.pathname=='/dashboard/empresa'){
+    CargarEmpresa();
+  }
+  if(window.location.pathname=='/dashboard/'){
+    initMap();
+  }
+  if(window.location.pathname=='/dashboard/conductores'){
+    runConductors();
+  }  
+}
+
+var running_app = null;
+
+running_app = setInterval(perfectTimer,1000);
 
 function EditarEmpresa(){
 
 $('.input_editable').each(function(){
-var id = $(this).attr("id");
-var content = $(this).html();
-var input = '<input type="text" class="form-control input_content" name="'+id+'_input" id="'+id+'_input" value="'+content+'">';
-$(this).empty();
-$(this).append(input);
-});
+  var id = $(this).attr("id");
+  var content = $(this).html();
+  var input = '<input type="text" class="form-control input_content" name="'+id+'_input" id="'+id+'_input" value="'+content+'">';
+  $(this).empty();
+  $(this).append(input);
+  });
 
-
+$('.img_editable').each(function(){
+  var id = $(this).attr("id");
+  var input = '<input type="file" class="form-control-file" name="'+id+'_input" id="'+id+'_input" placeholder="">';
+  $(this).empty();
+  $(this).append(input);
+  });
 
 $("#buttonempresa").empty();
 var buttonSave = '<a class="nav-link waves-effect" href="javascript:GuardarEmpresa();"><i class="fas fa-save" aria-hidden="true"></i> Guardar Empresa</a>';
@@ -617,18 +681,21 @@ $("#buttonempresa").append(buttonSave);
 }
 
 function runSave(){
-  var empresa = {};
-  empresa['empresa'] = $('#empresa_input').val();
-  empresa['telefono'] = $('#telefono_input').val();
-  empresa['correo'] = $('#correo_input').val();
-  empresa['pais_registro'] = $('#pais_registro_input').val();
-  empresa['representante_legal'] = $('#representante_legal_input').val();
-  empresa['codigo_transportista'] = $('#codigo_transportista_input').val();
-  empresa['id_representante_legal'] = $('#id_representante_legal_input').val();
-  empresa['id_transportista'] = $('#id_transportista_input').val();
-  empresa['direccion_fiscal'] = $('#direccion_fiscal_input').val();
-  empresa['paises_destino'] = $('#paises_destino_input').val();
-  empresa['tarjeta_federacion'] = $('#tarjeta_federacion_input').val();
+  var empresa_logo = $('#img_empresa_div_input')[0].files[0];
+  var id_representante = $('#img_id_rep_div_input')[0].files[0]; 
+  var empresa = new FormData();
+  empresa.append("id", usuario.id_user);
+  empresa.append("empresa", $('#empresa_input').val());
+  empresa.append("telefono", $('#telefono_input').val());
+  empresa.append("correo", $('#correo_input').val());
+  empresa.append("pais_registro", $('#pais_registro_input').val());
+  empresa.append("representante_legal", $('#representante_legal_input').val());
+  empresa.append("id_transportista", $('#id_transportista_input').val());
+  empresa.append("direccion_fiscal", $('#direccion_fiscal_input').val());
+  empresa.append("paises_destino", $('#paises_destino_input').val());
+  empresa.append("tarjeta_federacion", $('#tarjeta_federacion_input').val());
+  empresa.append("img_empresa", empresa_logo);
+  empresa.append("img_id_rep", id_representante);
 
   $('.input_editable').each(function(){
     var id = $(this).attr("id");
@@ -639,45 +706,57 @@ function runSave(){
     });
     });
     
+    $('.img_editable').each(function(){
+    var file = $('.img_editable > input')[0].files[0];
+    $(this).empty();
+    var content = '<img src="../media/'+file.name+'" style="max-height:256px!important;max-width:256px!important;"/>';
+    $(this).append(content);
+    });
   
 
 }
 
 
 function GuardarEmpresa(){
-  var empresa = {};
-  empresa['empresa'] = $('#empresa_input').val();
-  empresa['telefono'] = $('#telefono_input').val();
-  empresa['correo'] = $('#correo_input').val();
-  empresa['pais_registro'] = $('#pais_registro_input').val();
-  empresa['representante_legal'] = $('#representante_legal_input').val();
-  empresa['codigo_transportista'] = $('#codigo_transportista_input').val();
-  empresa['id_representante_legal'] = $('#id_representante_legal_input').val();
-  empresa['id_transportista'] = $('#id_transportista_input').val();
-  empresa['direccion_fiscal'] = $('#direccion_fiscal_input').val();
-  empresa['paises_destino'] = $('#paises_destino_input').val();
-  empresa['tarjeta_federacion'] = $('#tarjeta_federacion_input').val();
+
+  var empresa_logo = $('#img_empresa_div_input')[0].files[0];
+  var id_representante = $('#img_id_rep_div_input')[0].files[0]; 
+  var empresa = new FormData();
+  empresa.append("id", usuario.id_user);
+  empresa.append("type", usuario.type);
+  empresa.append("empresa", $('#empresa_input').val());
+  empresa.append("telefono", $('#telefono_input').val());
+  empresa.append("correo", $('#correo_input').val());
+  empresa.append("pais_registro", $('#pais_registro_input').val());
+  empresa.append("representante_legal", $('#representante_legal_input').val());
+  empresa.append("id_transportista", $('#id_transportista_input').val());
+  empresa.append("direccion_fiscal", $('#direccion_fiscal_input').val());
+  empresa.append("paises_destino", $('#paises_destino_input').val());
+  empresa.append("tarjeta_federacion", $('#tarjeta_federacion_input').val());
+  empresa.append("img_empresa", empresa_logo);
+  empresa.append("img_id_rep", id_representante);
   
-
   $.ajax({
-    type: "POST",
-    url: "/backend/guardar_empresa.php",
-    data: {
-    id: usuario.id_user, 
-    json: JSON.stringify(empresa),
-   }, 
-    cache: false,
-
+      type: "POST",
+      url: "/backend/guardar_empresa.php",
+      enctype: 'multipart/form-data',
+      data: empresa,
+     cache: false,
+     contentType: false, 
+     processData: false, 
+  
     success: function(sucessed){
-        if(sucessed == "success") {
-            alert("Se a guardado los Datos de la Empresa Correctamente");
-            runSave();
-        }
-        if(sucessed !== "success") {
-            alert(sucessed);
-        }
+      if(sucessed == "success") {
+          alert("Se a guardado los Datos de la Empresa Correctamente");
+          runSave();
+      }
+      if(sucessed !== "success") {
+          alert(sucessed);
+      }
     }
-});
+  });
+
+
 
 
   $("#buttonempresa").empty();

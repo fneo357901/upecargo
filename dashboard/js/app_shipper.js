@@ -502,11 +502,7 @@ if(estado=="suspendido"){
 
 $(document).ready(function() {
   $.ajaxSetup({ cache: false });
-  setTimeout(() => {
-    initMap();    
-  }, 1000);
 });
-
 
 
 function CargarEmpresa(){
@@ -527,23 +523,47 @@ function CargarEmpresa(){
     $('#direccion_fiscal').append(obj.direccion_fiscal);
     $('#paises_destino').append(obj.paises_destino);
     $('#tarjeta_federacion').append(obj.tarjeta_federacion);
+    $('#img_empresa').attr("src",obj.img_one);
+    $('#img_id_rep').attr("src",obj.img_two);
   }
   });
   closeNav();
 }
 
+function sleeping(){
+  clearInterval(running_app);
+}
+
+function perfectTimer(){
+setTimeout(sleeping,2000);
+  if(window.location.pathname=='/dashboard/empresa'){
+    CargarEmpresa();
+  }
+  if(window.location.pathname=='/dashboard/'){
+    initMap();
+  }
+}
+
+var running_app = null;
+
+running_app = setInterval(perfectTimer,1000);
 
 function EditarEmpresa(){
 
 $('.input_editable').each(function(){
-var id = $(this).attr("id");
-var content = $(this).html();
-var input = '<input type="text" class="form-control input_content" name="'+id+'_input" id="'+id+'_input" value="'+content+'">';
-$(this).empty();
-$(this).append(input);
-});
+  var id = $(this).attr("id");
+  var content = $(this).html();
+  var input = '<input type="text" class="form-control input_content" name="'+id+'_input" id="'+id+'_input" value="'+content+'">';
+  $(this).empty();
+  $(this).append(input);
+  });
 
-
+$('.img_editable').each(function(){
+  var id = $(this).attr("id");
+  var input = '<input type="file" class="form-control-file" name="'+id+'_input" id="'+id+'_input" placeholder="">';
+  $(this).empty();
+  $(this).append(input);
+  });
 
 $("#buttonempresa").empty();
 var buttonSave = '<a class="nav-link waves-effect" href="javascript:GuardarEmpresa();"><i class="fas fa-save" aria-hidden="true"></i> Guardar Empresa</a>';
@@ -552,18 +572,21 @@ $("#buttonempresa").append(buttonSave);
 }
 
 function runSave(){
-  var empresa = {};
-  empresa['empresa'] = $('#empresa_input').val();
-  empresa['telefono'] = $('#telefono_input').val();
-  empresa['correo'] = $('#correo_input').val();
-  empresa['pais_registro'] = $('#pais_registro_input').val();
-  empresa['representante_legal'] = $('#representante_legal_input').val();
-  empresa['codigo_transportista'] = $('#codigo_transportista_input').val();
-  empresa['id_representante_legal'] = $('#id_representante_legal_input').val();
-  empresa['id_transportista'] = $('#id_transportista_input').val();
-  empresa['direccion_fiscal'] = $('#direccion_fiscal_input').val();
-  empresa['paises_destino'] = $('#paises_destino_input').val();
-  empresa['tarjeta_federacion'] = $('#tarjeta_federacion_input').val();
+  var empresa_logo = $('#img_empresa_div_input')[0].files[0];
+  var id_representante = $('#img_id_rep_div_input')[0].files[0]; 
+  var empresa = new FormData();
+  empresa.append("id", usuario.id_user);
+  empresa.append("empresa", $('#empresa_input').val());
+  empresa.append("telefono", $('#telefono_input').val());
+  empresa.append("correo", $('#correo_input').val());
+  empresa.append("pais_registro", $('#pais_registro_input').val());
+  empresa.append("representante_legal", $('#representante_legal_input').val());
+  empresa.append("id_transportista", $('#id_transportista_input').val());
+  empresa.append("direccion_fiscal", $('#direccion_fiscal_input').val());
+  empresa.append("paises_destino", $('#paises_destino_input').val());
+  empresa.append("tarjeta_federacion", $('#tarjeta_federacion_input').val());
+  empresa.append("img_empresa", empresa_logo);
+  empresa.append("img_id_rep", id_representante);
 
   $('.input_editable').each(function(){
     var id = $(this).attr("id");
@@ -574,45 +597,55 @@ function runSave(){
     });
     });
     
+    $('.img_editable').each(function(){
+    var file = $('.img_editable > input')[0].files[0];
+    $(this).empty();
+    var content = '<img src="../media/'+file.name+'" style="max-height:256px!important;max-width:256px!important;"/>';
+    $(this).append(content);
+    });
   
 
 }
 
 
 function GuardarEmpresa(){
-  var empresa = {};
-  empresa['empresa'] = $('#empresa_input').val();
-  empresa['telefono'] = $('#telefono_input').val();
-  empresa['correo'] = $('#correo_input').val();
-  empresa['pais_registro'] = $('#pais_registro_input').val();
-  empresa['representante_legal'] = $('#representante_legal_input').val();
-  empresa['codigo_transportista'] = $('#codigo_transportista_input').val();
-  empresa['id_representante_legal'] = $('#id_representante_legal_input').val();
-  empresa['id_transportista'] = $('#id_transportista_input').val();
-  empresa['direccion_fiscal'] = $('#direccion_fiscal_input').val();
-  empresa['paises_destino'] = $('#paises_destino_input').val();
-  empresa['tarjeta_federacion'] = $('#tarjeta_federacion_input').val();
+
+  var empresa_logo = $('#img_empresa_div_input')[0].files[0];
+  var id_representante = $('#img_id_rep_div_input')[0].files[0]; 
+  var empresa = new FormData();
+  empresa.append("id", usuario.id_user);
+  empresa.append("type", usuario.type);
+  empresa.append("empresa", $('#empresa_input').val());
+  empresa.append("telefono", $('#telefono_input').val());
+  empresa.append("correo", $('#correo_input').val());
+  empresa.append("pais_registro", $('#pais_registro_input').val());
+  empresa.append("representante_legal", $('#representante_legal_input').val());
+  empresa.append("id_transportista", $('#id_transportista_input').val());
+  empresa.append("direccion_fiscal", $('#direccion_fiscal_input').val());
+  empresa.append("paises_destino", $('#paises_destino_input').val());
+  empresa.append("tarjeta_federacion", $('#tarjeta_federacion_input').val());
+  empresa.append("img_empresa", empresa_logo);
+  empresa.append("img_id_rep", id_representante);
   
-
   $.ajax({
-    type: "POST",
-    url: "/backend/guardar_empresa.php",
-    data: {
-    id: usuario.id_user, 
-    json: JSON.stringify(empresa),
-   }, 
-    cache: false,
-
+      type: "POST",
+      url: "/backend/guardar_empresa.php",
+      enctype: 'multipart/form-data',
+      data: empresa,
+     cache: false,
+     contentType: false, 
+     processData: false, 
+  
     success: function(sucessed){
-        if(sucessed == "success") {
-            alert("Se a guardado los Datos de la Empresa Correctamente");
-            runSave();
-        }
-        if(sucessed !== "success") {
-            alert(sucessed);
-        }
+      if(sucessed == "success") {
+          alert("Se a guardado los Datos de la Empresa Correctamente");
+          runSave();
+      }
+      if(sucessed !== "success") {
+          alert(sucessed);
+      }
     }
-});
+  });
 
 
 

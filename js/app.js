@@ -7,6 +7,9 @@ templateUrl : "main.html"
 .when("/login", {
 templateUrl : "iniciar-sesion.html"
 })
+.when("/new_password", {
+    templateUrl : "nwpsswd.html"
+})
 .when("/register", {
 templateUrl : "registro.html"
 })
@@ -109,12 +112,29 @@ $.ajax({
     success: function(sucessed){
         if(sucessed == "success") {
             alert("A sido registrado satisfactoriamente");
-            setTimeout(() => {
-                window.location.href = "/login";
-            }, 7000);
-        }f
-        if(sucessed == "error") {
-            alert("Ocurrio un error durante su registro, vuelva a intentarlo.");
+            $.ajax({
+                type: "POST",
+                url: "/backend/confirm_account.php",
+                data: { 
+                email: cliente.email.valueOf(),
+                }, 
+                cache: false,
+            
+                success: function(sucessed){
+                    if(sucessed == "success") {
+                        alert("Revise su correo para activar su cuenta");
+                        setTimeout(() => {
+                            window.location.href = "/login";
+                        }, 7000);
+                    }
+                    if(sucessed !== "success") {
+                        alert(sucessed);
+                    }
+                }
+            });
+        }
+        if(sucessed !== "success") {
+            alert(sucessed);
         }
     }
 });  
@@ -138,12 +158,29 @@ $.ajax({
     success: function(sucessed){
         if(sucessed == "success") {
             alert("A sido registrado satisfactoriamente");
-            setTimeout(() => {
-                window.location.href = "/login";
-            }, 7000);
+            $.ajax({
+                type: "POST",
+                url: "/backend/confirm_account.php",
+                data: { 
+                email: cliente.email.valueOf(),
+                }, 
+                cache: false,
+            
+                success: function(sucessed){
+                    if(sucessed == "success") {
+                        alert("Revise su correo para activar su cuenta");
+                        setTimeout(() => {
+                            window.location.href = "/login";
+                        }, 7000);
+                    }
+                    if(sucessed !== "success") {
+                        alert(sucessed);
+                    }
+                }
+            });
         }
-        if(sucessed == "error") {
-            alert("Ocurrio un error durante su registro, vuelva a intentarlo.");
+        if(sucessed !== "success") {
+            alert(sucessed);
         }    
     }
 });  
@@ -154,19 +191,19 @@ var recover = new Array();
 recover["email"] = $('#recoverpassword').val();
 $.ajax({
     type: "POST",
-    url: "/backend/reestablecer.php",
+    url: "/backend/recovery_password.php",
     data: { 
-    username: recover.email.valueOf(),
+    email: recover.email.valueOf(),
     }, 
     cache: false,
 
     success: function(sucessed){
         if(sucessed == "success") {
-            alert("Se le a enviado un correo electronico con las instrucciones para reestablecer su contraseña.");
+            alert("Se a enviado un correo con las instrucciones para reestablecer su contraseña.");
             window.location.href = "/login";
         }
-        if(sucessed == "error") {
-            alert("Disculpe no se encuentra su correo electronico entre nuestra lista de usuarios.");
+        if(sucessed !== "success") {
+            alert(sucessed);
         }    }
 });  
 }
@@ -234,3 +271,51 @@ if(variable=='propietario') {
     cliente["subtype"] = 'company';
     }
 }
+
+
+var $_GET = {};
+if(document.location.toString().indexOf('?') !== -1) {
+    var query = document.location
+                   .toString()
+                   // get the query string
+                   .replace(/^.*?\?/, '')
+                   // and remove any existing hash string (thanks, @vrijdenker)
+                   .replace(/#.*$/, '')
+                   .split('&');
+
+    for(var i=0, l=query.length; i<l; i++) {
+       var aux = decodeURIComponent(query[i]).split('=');
+       $_GET[aux[0]] = aux[1];
+    }
+}
+
+
+function nw_pw(){
+
+    var pw = $('#passwordr_1').val();
+    var pw_confirm = $('#passwordr_2').val();
+    var id_usr = $_GET['id'];
+    if( pw == pw_confirm ){
+        $.ajax({
+            type: "POST",
+            url: "/backend/change_password.php",
+            data: { 
+            id: id_usr,
+            nw_pw: pw,
+            }, 
+            cache: false,
+        
+            success: function(sucessed){
+                if(sucessed == "success") {
+                    alert("Su contraseña a sido cambiada satisfactoriamente.");
+                    window.location.href = "/login";
+                }
+                if(sucessed !== "success") {
+                    alert(sucessed);
+                }    }
+        });
+    } else {
+        alert('La contraseña no coincide con el campo de confirmacion.');
+    }
+  
+    }

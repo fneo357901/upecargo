@@ -18,7 +18,7 @@ if ($result->num_rows > 0) {
     echo '[{ data: "Registro Vacio" }]';
 }
 
-
+header("Content-type: application/json; charset=utf-8");
 
 $conn->close();
 

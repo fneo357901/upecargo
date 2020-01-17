@@ -29,3 +29,6 @@
 .vacio {
   font-weight: bold!important;
 }
+.center { 
+  margin: 0 auto !important; /* I have added the !important attribute just for debugging, you can remove it. */ 
+}

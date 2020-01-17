@@ -124,6 +124,29 @@ aria-hidden="true" style="z-index: 999999999999999999999!important;">
         <label for="">Foto de Perfil</label>
         <input type="file" class="form-control-file" name="conductor_img" id="conductor_img" placeholder="" aria-describedby="fileHelpId">
       </div>
+      <hr/>
+      <div class="form-group">
+        <label for="">Placa Unica de Rodaje</label>
+      <input type="file" class="form-control-file" name="PUR_img" id="PUR_img" placeholder="" aria-describedby="fileHelpId">
+        <input type="text"
+          class="form-control" id="PUR_id" aria-describedby="helpId" placeholder="Numero de Placa Unica de Rodaje">
+      </div>
+
+      <div class="form-group">
+        <label for="">Tarjeta de Circulacion</label>
+      <input type="file" class="form-control-file" name="TC_img" id="TC_img" placeholder="" aria-describedby="fileHelpId">
+        <input type="text"
+          class="form-control" id="TC_id" aria-describedby="helpId" placeholder="Numero de Tarjeta de Circulacion">
+      </div>
+
+      <div class="form-group">
+        <label for="">Pasaporte</label>
+      <input type="file" class="form-control-file" name="PSP_img" id="PSP_img" placeholder="" aria-describedby="fileHelpId">
+        <input type="text"
+          class="form-control" id="PSP_id" aria-describedby="helpId" placeholder="Numero de Pasaporte">
+      </div>
+
+
         <div class="form-group">
         <label for="">Nombre</label>
         <input type="text"
@@ -136,6 +159,29 @@ aria-hidden="true" style="z-index: 999999999999999999999!important;">
       </div>
       </div>
       <div class="col-md-6">
+
+      <div class="form-group">
+        <label for="">Licencia de Conducir</label>
+      <input type="file" class="form-control-file" name="LC_img" id="LC_img" placeholder="" aria-describedby="fileHelpId">
+        <input type="text"
+          class="form-control" id="LC_id" aria-describedby="helpId" placeholder="Numero de Licencia de Conducir">
+      </div>
+
+      <div class="form-group">
+        <label for="">Tarjeta de Federacion</label>
+      <input type="file" class="form-control-file" name="TF_img" id="TF_img" placeholder="" aria-describedby="fileHelpId">
+        <input type="text"
+          class="form-control" id="TF_id" aria-describedby="helpId" placeholder="Numero de Tarjeta de Federacion">
+      </div>
+
+      <div class="form-group">
+        <label for="">Tarjeta de Circulacion de Vagon</label>
+      <input type="file" class="form-control-file" name="TCV_img" id="TCV_img" placeholder="" aria-describedby="fileHelpId">
+        <input type="text"
+          class="form-control" id="TCV_id" aria-describedby="helpId" placeholder="Numero de Tarjeta de Cirulacion de Vagon">
+      </div>
+
+
       <div class="form-group">
         <label for="">Correo</label>
         <input type="text"
