@@ -1,0 +1,3 @@
+Naranja -> #FE4D00
+Negro -> #000000
+Blanco -> #FFFFF

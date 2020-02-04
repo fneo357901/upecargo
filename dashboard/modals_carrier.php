@@ -106,6 +106,67 @@
 
 
 
+<div class="modal fade" id="DisplayDocuments" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true" style="z-index: 999999999999!important">
+
+  <!-- Add .modal-dialog-centered to .modal-dialog to vertically center the modal -->
+  <div class="modal-dialog modal-dialog-centered" role="document" style="max-width:1200px!important">
+
+
+    <div class="modal-content">
+    <div class="modal-header">
+    Documentacion de Unidad / Conductor
+      </div>
+      <div class="modal-body text-center">
+        <div class="row">
+          <div class="col-md-4">
+          <!--<p>Foto Perfil</p>
+          <img class="foto_perfil ex" src="#" style="width:256px!important;margin-bottom: 1rem!important;" />-->
+          <p>Placa Rodaje Unica</p>
+          <img class="img_placa_rodaje_unica ex" src="#" style="width:256px!important;"/>
+          <p class="placa_rodaje_unica ex"></p>
+          <p>Tarjeta de Circulacion</p>
+          <img class="img_tarjeta_circulacion ex" src="#" style="width:256px!important;"/>
+          <p class="tarjeta_circulacion ex"></p>
+          <p>Telefono</p>
+          <p class="telefono ex"></p>
+          </div>
+          <div class="col-md-4">
+          <p>Licencia de Conducir</p>
+          <img class="img_licencia_conducir ex" src="#" style="width:256px!important;"/>
+          <p class="licencia_conducir ex"></p>
+          <p>Tarjeta de Federacion</p>
+          <img class="img_tarjeta_federacion ex" src="#" style="width:256px!important;"/>
+          <p class="tarjeta_federacion ex"></p>
+          <p>Correo</p>
+          <p class="correo ex"></p>
+          <p>Ubicacion</p>
+          <p class="ubicacion ex"></p> 
+          </div>
+          <div class="col-md-4">
+          <p>Pasaporte</p>
+          <img class="img_pasaporte ex" src="#" style="width:256px!important;"/>
+          <p class="pasaporte ex"></p>
+          <p>Tarjeta Circulacion de Vagon</p>
+          <img class="img_tarjeta_circulacion_vagon ex" src="#" style="width:256px!important;"/>
+          <p class="tarjeta_circulacion_vagon ex"></p>
+          <p>Nombre</p>
+          <p class="nombre ex"></p> 
+          </div>
+        </div>            
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
 <div class="modal fade" id="NewConductor" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
 aria-hidden="true" style="z-index: 999999999999999999999!important;">
 

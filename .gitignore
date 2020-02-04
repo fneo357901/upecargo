@@ -1,0 +1,2 @@
+# ignorar conexion a la base de datos
+/backend/db.php

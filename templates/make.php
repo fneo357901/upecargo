@@ -34,10 +34,10 @@ $mail = new PHPMailer(true);
 try {
     //Server settings
     $mail->isSMTP();                                            // Send using SMTP
-    $mail->Host       = 'smtp.sendgrid.net';                    // Set the SMTP server to send through
+    $mail->Host       = 'smtp.gmail.com';                    // Set the SMTP server to send through
     $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
-    $mail->Username   = 'apikey';                     // SMTP username
-    $mail->Password   = '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';                               // SMTP password
+    $mail->Username   = 'no-reply@strokcargo.com';                     // SMTP username
+    $mail->Password   = 'm5eMg%5D';                               // SMTP password
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` also accepted
     $mail->Port       = 587;                                    // TCP port to connect to
 

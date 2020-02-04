@@ -18,6 +18,9 @@
   <link href="css/mdb.min.css" rel="stylesheet">
   <!-- Your custom styles (optional) -->
   <link href="css/style.min.css" rel="stylesheet">
+  
+  <link href="js/magicsuggest/magicsuggest.css" rel="stylesheet">
+
 </head>
 <style>
 body {
@@ -102,6 +105,7 @@ position:fixed!important;
   <script type="text/javascript" src="js/mdb.min.js"></script>
     <script async defer 
     src="https://maps.googleapis.com/maps/api/js?key=<?php echo $maps_key ?>"></script>
+    <script src="js/magicsuggest/magicsuggest.js"></script>
     <?php
   if($_COOKIE['account']=='shipper'){ ?>
 
@@ -145,6 +149,13 @@ function closeNav() {
   }
 ?>
 
+<script>
+var destinatario_id = $('#new_order_destinatario_id').magicSuggest({
+placeholder: 'Correo del Destinatario',
+data: '/backend/users.php',
+maxSelection: 1,
+});
+</script>
 
 </body>
 </html>

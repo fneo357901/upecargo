@@ -206,6 +206,30 @@ $.ajax({
 });  
 }
 
+
+function make_a_socio(){
+  var nw_socio = new Array();
+  nw_socio["correo"] = $('#socio_correo').val();
+  $.ajax({
+      type: "POST",
+      url: "/backend/nuevo_socio.php",
+      data: { 
+      correo: nw_socio.correo.valueOf(),
+     }, 
+      cache: false,
+  
+      success: function(sucessed){
+          if(sucessed == "success") {
+              alert("Su Invitacion a sido Enviada");
+              $('#NewSocio').modal('hide');
+          }
+          if(sucessed == "error") {
+              alert("Ocurrio al Enviar la Invitacion. Intente de Nuevo.");
+          }
+      }
+  });  
+  }
+
 function ConductorCard(id,nombre,telefono,correo,img,estado){
   var CardConductor = new Array();
   CardConductor['id'] = id;
@@ -436,6 +460,7 @@ $.ajax({
 function no(){
   $('#NewOrder').modal('show');
 }
+
 function encargo_new_order(){
 var orden = new Array();
 
@@ -450,6 +475,7 @@ orden["transport_type"] = $('#new_order_transport_type').val();
 orden["carga"] = $('#new_order_carga').val();
 orden["requisitos"] = $('#new_order_requisitos').val();
 orden["advertencias"] = $('#new_order_advertencias').val();
+orden["destinatario_id"] = destinatario_id.getValue()['0'];
 
 $.ajax({
     type: "POST",
@@ -466,6 +492,7 @@ $.ajax({
     carga: orden.carga.valueOf(),
     requisitos: orden.requisitos.valueOf(),
     advertencias: orden.advertencias.valueOf(),
+    destinatario_id: orden.destinatario_id.valueOf(),
    }, 
     cache: false,
 
@@ -502,6 +529,9 @@ if(estado=="suspendido"){
 
 $(document).ready(function() {
   $.ajaxSetup({ cache: false });
+  setTimeout(() => {
+    initMap();
+  }, 1000);
 });
 
 
@@ -530,24 +560,6 @@ function CargarEmpresa(){
   closeNav();
 }
 
-function sleeping(){
-  clearInterval(running_app);
-}
-
-function perfectTimer(){
-setTimeout(sleeping,2000);
-  if(window.location.pathname=='/dashboard/empresa'){
-    CargarEmpresa();
-  }
-  if(window.location.pathname=='/dashboard/'){
-    initMap();
-  }
-}
-
-var running_app = null;
-
-running_app = setInterval(perfectTimer,1000);
-
 function EditarEmpresa(){
 
 $('.input_editable').each(function(){
@@ -572,9 +584,10 @@ $("#buttonempresa").append(buttonSave);
 }
 
 function runSave(){
+  delete empresa;
   var empresa_logo = $('#img_empresa_div_input')[0].files[0];
-  var id_representante = $('#img_id_rep_div_input')[0].files[0]; 
-  var empresa = new FormData();
+  var id_representante = $('#img_id_rep_div_input')[0].files[0];
+  empresa = new FormData();
   empresa.append("id", usuario.id_user);
   empresa.append("empresa", $('#empresa_input').val());
   empresa.append("telefono", $('#telefono_input').val());
@@ -585,6 +598,8 @@ function runSave(){
   empresa.append("direccion_fiscal", $('#direccion_fiscal_input').val());
   empresa.append("paises_destino", $('#paises_destino_input').val());
   empresa.append("tarjeta_federacion", $('#tarjeta_federacion_input').val());
+  empresa.append("codigo_transportista", $('#codigo_transportista_input').val());
+  empresa.append("id_representante_legal", $('#id_representante_legal_input').val());
   empresa.append("img_empresa", empresa_logo);
   empresa.append("img_id_rep", id_representante);
 
@@ -609,10 +624,10 @@ function runSave(){
 
 
 function GuardarEmpresa(){
-
+  delete empresa;
   var empresa_logo = $('#img_empresa_div_input')[0].files[0];
-  var id_representante = $('#img_id_rep_div_input')[0].files[0]; 
-  var empresa = new FormData();
+  var id_representante = $('#img_id_rep_div_input')[0].files[0];
+  empresa = new FormData();
   empresa.append("id", usuario.id_user);
   empresa.append("type", usuario.type);
   empresa.append("empresa", $('#empresa_input').val());
@@ -624,6 +639,10 @@ function GuardarEmpresa(){
   empresa.append("direccion_fiscal", $('#direccion_fiscal_input').val());
   empresa.append("paises_destino", $('#paises_destino_input').val());
   empresa.append("tarjeta_federacion", $('#tarjeta_federacion_input').val());
+  empresa.append("codigo_transportista", $('#codigo_transportista_input').val());
+  empresa.append("id_representante_legal", $('#id_representante_legal_input').val());
+  empresa.append("tarjeta_federacion", $('#tarjeta_federacion_input').val());
+
   empresa.append("img_empresa", empresa_logo);
   empresa.append("img_id_rep", id_representante);
   
@@ -656,8 +675,9 @@ function GuardarEmpresa(){
   
 }
 
-
-
+function InvitarSocio(){
+  $("#NewSocio").modal('show'); 
+}
 
 var map, infoWindow;
 var markers = [];
@@ -734,6 +754,32 @@ setInterval(() => {
   });
 }, 5000);
 
+
+
+//////////////////////////////////////////////////////////////////////
+
+var url = window.location.pathname;
+
+  setInterval(function(){
+    if(window.location.pathname != url){
+    url = window.location.pathname;
+
+    //////////////////////////////////////////////////////////////////
+
+    if(window.location.pathname=='/dashboard/empresa'){
+      CargarEmpresa();
+    }
+    if(window.location.pathname=='/dashboard/'){
+      initMap();
+      closeNav();
+    }
+
+    //////////////////////////////////////////////////////////////////
+
+  }
+  },1000);
+
+//////////////////////////////////////////////////////////////////////
 
 
 

@@ -31,6 +31,11 @@ aria-hidden="true" style="z-index: 999999999999999999999!important">
     </div>
     <div class="col-md-4">
     <div class="form-group">
+        <label for="">Destinatario</label>
+        <div id="new_order_destinatario_id"></div>
+        
+    </div>
+    <div class="form-group">
         <label for="">Fecha de Busqueda</label>
         <input type="text"
           class="form-control" id="new_order_fecha_recogida" aria-describedby="helpId" placeholder="">
@@ -205,7 +210,7 @@ aria-hidden="true" style="z-index: 999999999999999999999!important">
   </div>
 </div>
 
-<div class="modal fade" id="NewConductor" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+<div class="modal fade" id="NewSocio" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
 aria-hidden="true" style="z-index: 999999999999999999999!important">
 
 <!-- Add .modal-dialog-centered to .modal-dialog to vertically center the modal -->
@@ -214,32 +219,17 @@ aria-hidden="true" style="z-index: 999999999999999999999!important">
 
   <div class="modal-content">
     <div class="modal-header">
-      <h5 class="modal-title" id="exampleModalLongTitle">Nuevo Conductor</h5>
+      <h5 class="modal-title" id="exampleModalLongTitle">Nuevo Socio</h5>
     </div>
     <div class="modal-body">
+      Ingrese el E-Mail del Socio que desea Invitar a la Plataforma
       <div class="form-group">
-        <label for="">URL de Foto del Conductor</label>
         <input type="text"
-        class="form-control" id="conductor_img_url" aria-describedby="helpId" placeholder="">
-        </div>
-        <div class="form-group">
-        <label for="">Nombre</label>
-        <input type="text"
-          class="form-control" id="conductor_nombre" aria-describedby="helpId" placeholder="">
-      </div>
-      <div class="form-group">
-        <label for="">Telefono</label>
-        <input type="text"
-          class="form-control" id="conductor_telefono" aria-describedby="helpId" placeholder="">
-      </div>
-      <div class="form-group">
-        <label for="">Correo</label>
-        <input type="text"
-          class="form-control" id="conductor_correo" aria-describedby="helpId" placeholder="">
+          class="form-control" id="socio_correo" aria-describedby="helpId" placeholder="">
       </div>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-primary" onclick="make_a_conductor();">Guardar Cambios</button>
+        <button type="button" class="btn btn-primary" onclick="make_a_socio();">Enviar Invitacion</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
       </div>
     </div>

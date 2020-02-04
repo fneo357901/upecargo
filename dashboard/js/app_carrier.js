@@ -242,7 +242,7 @@ function ConductorCard(id,nombre,telefono,correo,img,estado,pur,tc,psp,lc,tf,tcv
     if(estado=='suspendido'){
       CardConductor['estado'] = '<tr id="ConductorEstadoDisplay_'+CardConductor.id+'"><th onclick="ConductorEditEstado(\''+estado+'\',\''+CardConductor.id+'\');" class="py-2" style="color: red;"><i class="fas fa-backspace"></i> Suspendido</th></tr>';
     }
-  var print_card = '<div class="col-md-6 mb-4 conductor '+estado+' Conductor_'+CardConductor.id+'"> <div class="card"> <button type="button" onclick=\"DettachConductor(\''+CardConductor.id+'\');\" class="close" style="width:100%!important;padding-right:10px!important;padding-top:5px!important;position: absolute!important;"><span aria-hidden="true" class="float-right">×</span></button> <div class="card-body"> <div class="avatar white col-md-4 py-0 float-left pt-2"><img src="'+CardConductor.img+'" class="rounded-circle w-100" alt="woman avatar"></div><table class="table table-hover col-md-8 float-right mb-0"> <tbody> <tr> <th class="py-2"><i class="fas fa-user "></i> '+CardConductor.nombre+'</th> </tr><tr> <th class="py-2"><i class="fas fa-phone "></i> '+CardConductor.telefono+'</th> </tr><tr> <th class="py-2"><i class="fas fa-envelope "></i> '+CardConductor.correo+'</th> </tr>'+CardConductor.estado+' </tbody> </table><div> <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapse_'+CardConductor.id+'" aria-expanded="false" aria-controls="collapse_'+CardConductor.id+'"> Documentacion </button></div><div class="collapse" id="collapse_'+CardConductor.id+'"> <div class="mt-3"><table class="table table-hover col-md-8 float-right mb-0"> <tbody> <tr> <th class="py-2"><a href="'+CardConductor.pur+'" target="_blank">Placa Unica de Rodaje</a></th> </tr><tr> <th class="py-2"><a href="'+CardConductor.tc+'" target="_blank">Tarjeta de Circulacion</a></th> </tr><tr> <th class="py-2"><a href="'+CardConductor.psp+'" target="_blank">Pasaporte</a></th> </tr><tr> <th class="py-2"><a href="'+CardConductor.lc+'" target="_blank">Licencia de Conducir</a></th> </tr><tr> <th class="py-2"><a href="'+CardConductor.tf+'" target="_blank">Tarjeta de Federacion</a></th> </tr><tr> <th class="py-2"><a href="'+CardConductor.tcv+'" target="_blank">Tarjeta de Circulacion de Vagon</a></th> </tr></tbody> </table> </div></div></div></div></div></div>';
+  var print_card = '<div class="col-md-4 mb-4 conductor '+estado+' Conductor_'+CardConductor.id+'"> <div class="card"> <button type="button" onclick="DettachConductor('+CardConductor.id+');" class="close" style="width:100%!important;padding-right:10px!important;padding-top:5px!important;position: absolute!important;"><span aria-hidden="true" class="float-right">×</span></button> <div class="card-body"> <div class="avatar white col-md-5 py-0 float-left pt-2"><img src="'+CardConductor.img+'" class="rounded-circle w-100" alt="woman avatar"></div><table class="table table-hover col-md-7 float-right mb-0"> <tbody> <tr> <th class="py-2"><i class="fas fa-user "></i> '+CardConductor.nombre+'</th> </tr><tr> <th class="py-2"><i class="fas fa-phone "></i> '+CardConductor.telefono+'</th> </tr><tr> <th class="py-2"><i class="fas fa-envelope "></i> '+CardConductor.correo+'</th> </tr>'+CardConductor.estado+' </tbody> </table> <a href="javascript:conductor_detalle('+CardConductor.id+')" class="btn btn-primary w-100">Ver Documentacion</a> </div></div></div></div>';
   $('#Conductors').append(print_card);
 }
 function runConductors(){
@@ -411,6 +411,42 @@ function tomar_envio(id){
   $("#button_assign").append(button_assign);
   $('#tomar_envio').modal('show');
 }
+
+
+function conductor_detalle(id){
+  $(".ex").empty();
+  $(".modal-footer").empty();
+  $.getJSON('/backend/detail_c.php', {id: id, _: new Date().getTime()}, function(data) {
+      var jdata = data; 
+
+      $('#DisplayDocuments > div > div > div.modal-body > div > div:nth-child(1) > img.foto_perfil').attr('src',jdata['0'].img);
+      $('#DisplayDocuments > div > div > div.modal-body > div > div:nth-child(1) > img.img_placa_rodaje_unica').attr('src',jdata['0'].PUR_img);
+      $('#DisplayDocuments > div > div > div.modal-body > div > div:nth-child(1) > img.img_tarjeta_circulacion').attr('src',jdata['0'].TC_img);
+      $('#DisplayDocuments > div > div > div.modal-body > div > div:nth-child(2) > img.img_licencia_conducir').attr('src',jdata['0'].LC_img);
+      $('#DisplayDocuments > div > div > div.modal-body > div > div:nth-child(2) > img.img_tarjeta_federacion').attr('src',jdata['0'].TF_img);
+      $('#DisplayDocuments > div > div > div.modal-body > div > div:nth-child(3) > img.img_tarjeta_circulacion_vagon').attr('src',jdata['0'].TCV_img);
+      $('#DisplayDocuments > div > div > div.modal-body > div > div:nth-child(3) > img.img_pasaporte').attr('src',jdata['0'].PSP_img);
+
+
+
+      $('#DisplayDocuments > div > div > div.modal-body > div > div:nth-child(1) > p.placa_rodaje_unica').append('ID # '+jdata['0'].PUR_id);
+      $('#DisplayDocuments > div > div > div.modal-body > div > div:nth-child(1) > p.tarjeta_circulacion').append('ID # '+jdata['0'].TC_id);
+      $('#DisplayDocuments > div > div > div.modal-body > div > div:nth-child(3) > p.pasaporte').append('ID # '+jdata['0'].PSP_id);
+      $('#DisplayDocuments > div > div > div.modal-body > div > div:nth-child(3) > p.nombre').append(jdata['0'].nombre);
+      $('#DisplayDocuments > div > div > div.modal-body > div > div:nth-child(1) > p.telefono').append(jdata['0'].telefono);
+      $('#DisplayDocuments > div > div > div.modal-body > div > div:nth-child(2) > p.licencia_conducir').append('ID # '+jdata['0'].LC_id);
+      $('#DisplayDocuments > div > div > div.modal-body > div > div:nth-child(2) > p.tarjeta_federacion').append('ID # '+jdata['0'].TF_id);
+      $('#DisplayDocuments > div > div > div.modal-body > div > div:nth-child(3) > p.tarjeta_circulacion_vagon').append('ID # '+jdata['0'].TCV_id);
+      $('#DisplayDocuments > div > div > div.modal-body > div > div:nth-child(2) > p.correo').append(jdata['0'].correo);
+      $('#DisplayDocuments > div > div > div.modal-body > div > div:nth-child(2) > p.ubicacion').append(jdata['0'].ubicacion);
+      
+      $('#DisplayDocuments > div > div > div.modal-header > h5.modal-title').append(jdata['0'].carga);
+      close_button = '<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>';
+      $('#DisplayDocuments > div > div > div.modal-footer').append(close_button);
+    });
+  $('#DisplayDocuments').modal('show');
+}
+
 
 
 function encargo_detalle(id){  
@@ -636,27 +672,6 @@ function CargarEmpresa(){
   closeNav();
 }
 
-function sleeping(){
-  clearInterval(running_app);
-}
-
-function perfectTimer(){
-setTimeout(sleeping,2000);
-  if(window.location.pathname=='/dashboard/empresa'){
-    CargarEmpresa();
-  }
-  if(window.location.pathname=='/dashboard/'){
-    initMap();
-  }
-  if(window.location.pathname=='/dashboard/conductores'){
-    runConductors();
-  }  
-}
-
-var running_app = null;
-
-running_app = setInterval(perfectTimer,1000);
-
 function EditarEmpresa(){
 
 $('.input_editable').each(function(){
@@ -681,9 +696,10 @@ $("#buttonempresa").append(buttonSave);
 }
 
 function runSave(){
+  delete empresa;
   var empresa_logo = $('#img_empresa_div_input')[0].files[0];
-  var id_representante = $('#img_id_rep_div_input')[0].files[0]; 
-  var empresa = new FormData();
+  var id_representante = $('#img_id_rep_div_input')[0].files[0];
+  empresa = new FormData();
   empresa.append("id", usuario.id_user);
   empresa.append("empresa", $('#empresa_input').val());
   empresa.append("telefono", $('#telefono_input').val());
@@ -694,6 +710,8 @@ function runSave(){
   empresa.append("direccion_fiscal", $('#direccion_fiscal_input').val());
   empresa.append("paises_destino", $('#paises_destino_input').val());
   empresa.append("tarjeta_federacion", $('#tarjeta_federacion_input').val());
+  empresa.append("codigo_transportista", $('#codigo_transportista_input').val());
+  empresa.append("id_representante_legal", $('#id_representante_legal_input').val());
   empresa.append("img_empresa", empresa_logo);
   empresa.append("img_id_rep", id_representante);
 
@@ -718,10 +736,10 @@ function runSave(){
 
 
 function GuardarEmpresa(){
-
+  delete empresa;
   var empresa_logo = $('#img_empresa_div_input')[0].files[0];
-  var id_representante = $('#img_id_rep_div_input')[0].files[0]; 
-  var empresa = new FormData();
+  var id_representante = $('#img_id_rep_div_input')[0].files[0];
+  empresa = new FormData();
   empresa.append("id", usuario.id_user);
   empresa.append("type", usuario.type);
   empresa.append("empresa", $('#empresa_input').val());
@@ -733,6 +751,10 @@ function GuardarEmpresa(){
   empresa.append("direccion_fiscal", $('#direccion_fiscal_input').val());
   empresa.append("paises_destino", $('#paises_destino_input').val());
   empresa.append("tarjeta_federacion", $('#tarjeta_federacion_input').val());
+  empresa.append("codigo_transportista", $('#codigo_transportista_input').val());
+  empresa.append("id_representante_legal", $('#id_representante_legal_input').val());
+  empresa.append("tarjeta_federacion", $('#tarjeta_federacion_input').val());
+
   empresa.append("img_empresa", empresa_logo);
   empresa.append("img_id_rep", id_representante);
   
@@ -842,6 +864,41 @@ setInterval(() => {
 }, 5000);
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+//////////////////////////////////////////////////////////////////////
+
+var url = window.location.pathname;
+
+  setInterval(function(){
+    if(window.location.pathname != url){
+    url = window.location.pathname;
+
+    //////////////////////////////////////////////////////////////////
+
+    if(window.location.pathname=='/dashboard/conductores'){
+      runConductors();
+    }
+    if(window.location.pathname=='/dashboard/empresa'){
+      CargarEmpresa();
+    }
+    if(window.location.pathname=='/dashboard/'){
+      initMap();
+    }
+
+    //////////////////////////////////////////////////////////////////
+
+  }
+  },1000);
+
+//////////////////////////////////////////////////////////////////////
+
+
+
+
+
 
 
       var app = angular.module("myApp", ["ngRoute"]);

@@ -9,7 +9,7 @@ $password = $_POST['password'];
 $email = $_POST['email'];
 $phone = $_POST['phone'];
 $type = $_POST['type'];
-$sql = sprintf("INSERT INTO usuarios (nombre, apellido, email, telefono, tipo, empresa_data, pass, subtipo) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s');",$firstname,$lastname,$email,$phone,$type,$company,$password,'');
+$sql = sprintf("INSERT INTO usuarios (nombre, apellido, email, telefono, tipo, empresa_data, pass, subtipo) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s');",$firstname,$lastname,$email,$phone,$type,'',$password,'');
 $sql = urldecode($sql);
 }
 if($_POST['type']=="carrier"){
@@ -21,7 +21,7 @@ $email = $_POST['email'];
 $phone = $_POST['phone'];
 $type = $_POST['type'];
 $subtype = $_POST['subtype'];
-$sql = sprintf("INSERT INTO usuarios (nombre, apellido, email, telefono, tipo, subtipo, pass, empresa_data) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s');",$firstname,$lastname,$email,$phone,$type,$subtype,$password,'null');
+$sql = sprintf("INSERT INTO usuarios (nombre, apellido, email, telefono, tipo, subtipo, pass, empresa_data) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s');",$firstname,$lastname,$email,$phone,$type,$subtype,$password,'');
 $sql = urldecode($sql);
 }
 
